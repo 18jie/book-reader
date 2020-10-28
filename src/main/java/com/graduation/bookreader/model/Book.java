@@ -39,4 +39,8 @@ public class Book extends BaseModel implements Serializable {
 
     private Integer likeCount;
 
+    private String bookPath;
+
+    private String imgPath;
+
 }
