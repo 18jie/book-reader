@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: book-reader
+
+server:
+  servlet:
+    context-path: /book-reader
