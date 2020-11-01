@@ -1,7 +1,15 @@
 spring:
   application:
     name: book-reader
+  profiles:
+    active: jdbc
 
 server:
   servlet:
     context-path: /book-reader
+
+
+logging:
+  level:
+    com.qisheng.mgjcrm.dao : debug
+  config: classpath:log4j2.yml # 指定log4j配置文件的位置
