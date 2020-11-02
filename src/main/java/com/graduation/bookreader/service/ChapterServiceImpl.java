@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.model.Chapter;
 import com.graduation.bookreader.repo.ChapterMapper;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
  * Date: 2020-11-01
  * Time: 21:13
  */
+@Service
 public class ChapterServiceImpl implements ChapterService {
 
     @Resource

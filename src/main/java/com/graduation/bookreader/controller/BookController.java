@@ -37,4 +37,9 @@ public class BookController {
         return Result.success(bookService.getBookById(id));
     }
 
+    @GetMapping("/bookDetail")
+    public Result bookDetail(Integer bookId) {
+        return Result.success(bookService.bookDetail(bookId));
+    }
+
 }

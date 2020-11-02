@@ -5,13 +5,20 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.enums.BookTypeEnum;
 import com.graduation.bookreader.model.Book;
+import com.graduation.bookreader.model.User;
+import com.graduation.bookreader.model.UserFavorite;
 import com.graduation.bookreader.model.Weight;
+import com.graduation.bookreader.model.vo.UserFavoriteBookVo;
 import com.graduation.bookreader.repo.BookMapper;
+import com.graduation.bookreader.repo.UserFavoriteMapper;
 import com.graduation.bookreader.repo.WeightMapper;
+import com.graduation.bookreader.util.UserSession;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Description:
@@ -27,6 +34,12 @@ public class BookServiceImpl implements BookService {
 
     @Resource
     private WeightMapper weightMapper;
+
+    @Resource
+    private UserFavoriteMapper userFavoriteMapper;
+
+    @Resource
+    private UserSession userSession;
 
     @Override
     public IPage<Book> listBookByType(Integer type, Integer pageNum, Integer pageSize) {
@@ -87,5 +100,22 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book getBookById(Integer id) {
         return bookMapper.selectById(id);
+    }
+
+    @Override
+    public UserFavoriteBookVo bookDetail(Integer bookId) {
+        User user = userSession.localUser();
+        UserFavorite userFavorite = new UserFavorite();
+        userFavorite.setUserId(user.getId());
+
+        QueryWrapper<UserFavorite> queryWrapper = new QueryWrapper<>(userFavorite);
+        List<UserFavorite> userFavorites = userFavoriteMapper.selectList(queryWrapper);
+        List<Integer> books = userFavorites.stream().map(UserFavorite::getBookId).collect(Collectors.toList());
+        Book book = bookMapper.selectById(bookId);
+
+        UserFavoriteBookVo userFavoriteBookVo = new UserFavoriteBookVo();
+        BeanUtils.copyProperties(book, userFavorite);
+        userFavoriteBookVo.setIsFavorite(books.contains(bookId));
+        return userFavoriteBookVo;
     }
 }

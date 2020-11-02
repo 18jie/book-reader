@@ -2,6 +2,7 @@ package com.graduation.bookreader.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.graduation.bookreader.model.Book;
+import com.graduation.bookreader.model.vo.UserFavoriteBookVo;
 
 /**
  * Description:
@@ -25,6 +26,7 @@ public interface BookService {
 
     /**
      * 通过名称查询书籍
+     *
      * @param name     书名
      * @param pageNum  页码
      * @param pageSize 单页大小
@@ -35,9 +37,17 @@ public interface BookService {
     /**
      * TODO 这个是查询的详情页，后期需要修改
      * 需要增加用户是否收藏，是否喜欢等等信息
+     *
      * @param id
      * @return
      */
     Book getBookById(Integer id);
+
+    /**
+     * 书籍详情，如果用户已经登录，显示是否收藏
+     * @param bookId
+     * @return
+     */
+    UserFavoriteBookVo bookDetail(Integer bookId);
 
 }
