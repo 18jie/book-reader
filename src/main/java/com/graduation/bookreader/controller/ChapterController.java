@@ -1,6 +1,5 @@
 package com.graduation.bookreader.controller;
 
-import com.graduation.bookreader.model.Chapter;
 import com.graduation.bookreader.service.ChapterService;
 import com.graduation.bookreader.util.Result;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +27,14 @@ public class ChapterController {
         return Result.success(chapterService.listChapterbyBookId(bookId, pageNum, pageSize));
     }
 
+    @GetMapping("/getChapterById")
     public Result getChapterById(Integer id) {
         return Result.success(chapterService.getChapterById(id));
+    }
+
+    @GetMapping("/chapterDetail")
+    public Result chapterDetail(Integer chapterId) {
+        return Result.success(chapterService.chapterDetail(chapterId));
     }
 
 }

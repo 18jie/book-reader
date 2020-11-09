@@ -24,9 +24,9 @@ public class Chapter extends BaseModel implements Serializable {
 
     private Integer bookId;
 
-    private Integer chapter_num;
+    private Integer chapterNum;
 
-    private String chapter_name;
+    private String chapterName;
 
     private String content;
 

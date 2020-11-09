@@ -1,10 +1,9 @@
 package com.graduation.bookreader.controller;
 
+import com.graduation.bookreader.model.Book;
 import com.graduation.bookreader.service.BookService;
 import com.graduation.bookreader.util.Result;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -40,6 +39,16 @@ public class BookController {
     @GetMapping("/bookDetail")
     public Result bookDetail(Integer bookId) {
         return Result.success(bookService.bookDetail(bookId));
+    }
+
+    @PostMapping("/addBook")
+    public Result addBook(@RequestBody Book book){
+        return null;
+    }
+
+    @PostMapping("updateBook")
+    public Result updateBook(@RequestBody Book book){
+        return null;
     }
 
 }

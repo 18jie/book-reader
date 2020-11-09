@@ -38,4 +38,10 @@ public class Result<T> {
         return result;
     }
 
+    public static Result fail(){
+        Result result = new Result();
+        result.code = 1;
+        return result;
+    }
+
 }

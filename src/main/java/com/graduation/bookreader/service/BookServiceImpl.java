@@ -4,12 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.enums.BookTypeEnum;
-import com.graduation.bookreader.model.Book;
-import com.graduation.bookreader.model.User;
-import com.graduation.bookreader.model.UserFavorite;
-import com.graduation.bookreader.model.Weight;
+import com.graduation.bookreader.model.*;
 import com.graduation.bookreader.model.vo.UserFavoriteBookVo;
 import com.graduation.bookreader.repo.BookMapper;
+import com.graduation.bookreader.repo.ChapterMapper;
 import com.graduation.bookreader.repo.UserFavoriteMapper;
 import com.graduation.bookreader.repo.WeightMapper;
 import com.graduation.bookreader.util.UserSession;
@@ -40,6 +38,9 @@ public class BookServiceImpl implements BookService {
 
     @Resource
     private UserSession userSession;
+
+    @Resource
+    private ChapterMapper chapterMapper;
 
     @Override
     public IPage<Book> listBookByType(Integer type, Integer pageNum, Integer pageSize) {
@@ -116,6 +117,11 @@ public class BookServiceImpl implements BookService {
         UserFavoriteBookVo userFavoriteBookVo = new UserFavoriteBookVo();
         BeanUtils.copyProperties(book, userFavorite);
         userFavoriteBookVo.setIsFavorite(books.contains(bookId));
+
+        QueryWrapper<Chapter> chapterQueryWrapper = new QueryWrapper<>();
+        chapterQueryWrapper.select("id", "bookId", "chapterNum", "chapterName").eq("bookId", bookId);
+        List<Chapter> chapters = chapterMapper.selectList(chapterQueryWrapper);
+        userFavoriteBookVo.setChapters(chapters);
         return userFavoriteBookVo;
     }
 }

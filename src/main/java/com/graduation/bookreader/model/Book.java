@@ -31,6 +31,9 @@ public class Book extends BaseModel implements Serializable {
 
     private String bookWriter;
 
+    // TODO 新加字段，需要添加到数据库
+    private String bookIntroduction;
+
     private Date bookUpdateTime;
 
     private Integer bookClickCount;

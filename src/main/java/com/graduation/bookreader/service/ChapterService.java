@@ -2,6 +2,7 @@ package com.graduation.bookreader.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.graduation.bookreader.model.Chapter;
+import com.graduation.bookreader.model.vo.ChapterDetailVo;
 
 /**
  * Description:
@@ -23,5 +24,7 @@ public interface ChapterService {
     IPage<Chapter> listChapterbyBookId(Integer bookId, Integer pageNum, Integer pageSize);
 
     Chapter getChapterById(Integer id);
+
+    ChapterDetailVo chapterDetail(Integer chapterId);
 
 }

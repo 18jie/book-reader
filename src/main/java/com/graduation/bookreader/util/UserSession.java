@@ -22,6 +22,9 @@ public class UserSession {
 
     public User localUser(){
         Integer userId = UserThreadLocalContext.getUser();
+        if(userId == null){
+            return null;
+        }
         return userMapper.selectById(userId);
     }
 
