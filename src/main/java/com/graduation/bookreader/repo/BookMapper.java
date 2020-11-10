@@ -2,6 +2,7 @@ package com.graduation.bookreader.repo;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.graduation.bookreader.model.Book;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,6 +12,5 @@ import org.springframework.stereotype.Repository;
  * Date: 2020-10-27
  * Time: 21:54
  */
-@Repository
 public interface BookMapper extends BaseMapper<Book> {
 }

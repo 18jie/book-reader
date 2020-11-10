@@ -26,6 +26,6 @@ public class Weight extends BaseModel implements Serializable {
 
     private Integer favorite;
 
-    private Integer like;
+    private Integer wLike;
 
 }

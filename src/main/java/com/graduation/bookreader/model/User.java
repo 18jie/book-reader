@@ -26,7 +26,6 @@ public class User extends BaseModel implements Serializable {
 
     private String userPhone;
 
-    // TODO 新增字段，需要添加到数据库
     private Integer age;
 
     private String password;

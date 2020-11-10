@@ -11,5 +11,5 @@ server:
 
 logging:
   level:
-    com.qisheng.mgjcrm.dao : debug
-  config: classpath:log4j2.yml # 指定log4j配置文件的位置
+    com.graduation.bookreader.repo : debug
+#  config: classpath:log4j.xml # 指定log4j配置文件的位置

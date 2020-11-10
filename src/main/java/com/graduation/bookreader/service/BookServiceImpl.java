@@ -57,7 +57,7 @@ public class BookServiceImpl implements BookService {
         List<String> weigthSort = new ArrayList<>();
         books.forEach(book -> {
             String key = (book.getBookClickCount() * weight.getClick() + book.getFavoriteCount() * weight.getFavorite() +
-                    book.getLikeCount() * weight.getLike()) + "-" + book.getId();
+                    book.getLikeCount() * weight.getWLike()) + "-" + book.getId();
             weigthSort.add(key);
         });
         weigthSort.sort((o1, o2) -> {

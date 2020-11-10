@@ -20,11 +20,10 @@ public class LoginIntercepter extends HandlerInterceptorAdapter {
 
         StringBuffer requestURL = request.getRequestURL();
         Integer userId = (Integer) request.getSession().getAttribute("user");
-        if(!requestURL.toString().contains("login") && userId != null){
-            return true;
+        if(requestURL.toString().contains("auth") && userId != null){
+            response.sendRedirect("/book-reader/login");
         }
-        response.sendRedirect("/book-reader/login");
-        return false;
+        return true;
     }
 
     @Override
