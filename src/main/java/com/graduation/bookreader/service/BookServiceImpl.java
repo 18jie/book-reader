@@ -11,6 +11,8 @@ import com.graduation.bookreader.repo.ChapterMapper;
 import com.graduation.bookreader.repo.UserFavoriteMapper;
 import com.graduation.bookreader.repo.WeightMapper;
 import com.graduation.bookreader.util.UserSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class BookServiceImpl implements BookService {
+    private final static Logger logger = LoggerFactory.getLogger(BookServiceImpl.class);
+
     @Resource
     private BookMapper bookMapper;
 
@@ -54,15 +58,17 @@ public class BookServiceImpl implements BookService {
         //权重
         weightQueryWrapper.eq("deleted", 0);
         Weight weight = weightMapper.selectOne(weightQueryWrapper);
+        weight = weight == null ? defaultWeight() : weight;
         List<String> weigthSort = new ArrayList<>();
-        books.forEach(book -> {
+        for (Book book : books) {
             String key = (book.getBookClickCount() * weight.getClick() + book.getFavoriteCount() * weight.getFavorite() +
                     book.getLikeCount() * weight.getWLike()) + "-" + book.getId();
             weigthSort.add(key);
-        });
+        }
         weigthSort.sort((o1, o2) -> {
-            int o1Int = Integer.parseInt(o1.substring(o1.indexOf("-", o1.length())));
-            int o2Int = Integer.parseInt(o1.substring(o2.indexOf("-", o1.length())));
+            logger.info(o1);
+            int o1Int = Integer.parseInt(o1.substring(0, o1.indexOf("-")));
+            int o2Int = Integer.parseInt(o2.substring(0, o2.indexOf("-")));
             if (o1Int > o2Int) {
                 return 1;
             } else if (o1Int < o2Int) {
@@ -73,20 +79,30 @@ public class BookServiceImpl implements BookService {
         //TODO 这个分页的计算可能需要修改
         Page<Book> page = new Page<>(pageNum, pageSize);
         Integer pageStart = Math.min((pageNum - 1) * pageSize, books.size());
-        Integer pageEnd = Math.min(pageNum * pageSize, books.size());
-        List<String> idStrs = weigthSort.subList(pageStart, pageNum);
+        logger.info("pageStart={},pageNum={}", pageStart, pageSize);
+        List<String> idStrs = weigthSort.subList(pageStart, pageSize);
 
+        logger.info("{}", idStrs);
         List<Integer> bookIds = new ArrayList<>();
         idStrs.forEach(id -> {
-            String realId = id.substring(id.indexOf("-"));
+            String realId = id.substring(id.indexOf("-") + 1);
             bookIds.add(Integer.parseInt(realId));
         });
         List<Book> bookList = bookMapper.selectBatchIds(bookIds);
         page.setRecords(bookList);
         page.setTotal(books.size());
         page.setSize(bookList.size());
+        page.setPages((int) Math.ceil((double) bookList.size() / pageSize));
 
         return page;
+    }
+
+    private Weight defaultWeight() {
+        Weight weight = new Weight();
+        weight.setClick(1);
+        weight.setFavorite(1);
+        weight.setWLike(1);
+        return weight;
     }
 
     @Override
@@ -105,14 +121,19 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public UserFavoriteBookVo bookDetail(Integer bookId) {
+        Book book = bookMapper.selectById(bookId);
         User user = userSession.localUser();
+        if(user == null){
+            UserFavoriteBookVo userFavorite = new UserFavoriteBookVo();
+            BeanUtils.copyProperties(book,userFavorite);
+        }
         UserFavorite userFavorite = new UserFavorite();
         userFavorite.setUserId(user.getId());
 
         QueryWrapper<UserFavorite> queryWrapper = new QueryWrapper<>(userFavorite);
         List<UserFavorite> userFavorites = userFavoriteMapper.selectList(queryWrapper);
         List<Integer> books = userFavorites.stream().map(UserFavorite::getBookId).collect(Collectors.toList());
-        Book book = bookMapper.selectById(bookId);
+
 
         UserFavoriteBookVo userFavoriteBookVo = new UserFavoriteBookVo();
         BeanUtils.copyProperties(book, userFavorite);

@@ -22,12 +22,12 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/listBooks")
-    public Result getSortBooksByType(Integer type, Integer pageNum, Integer pageSize) {
+    public Result getSortBooksByType(Integer type, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
         return Result.success(bookService.listBookByType(type, pageNum, pageSize));
     }
 
     @GetMapping("/listBooksByName")
-    public Result getBookByName(String name, Integer pageNum, Integer pageSize) {
+    public Result getBookByName(String name, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
         return Result.success(bookService.listBookByName(name, pageNum, pageSize));
     }
 
@@ -42,12 +42,12 @@ public class BookController {
     }
 
     @PostMapping("/addBook")
-    public Result addBook(@RequestBody Book book){
+    public Result addBook(@RequestBody Book book) {
         return null;
     }
 
     @PostMapping("updateBook")
-    public Result updateBook(@RequestBody Book book){
+    public Result updateBook(@RequestBody Book book) {
         return null;
     }
 

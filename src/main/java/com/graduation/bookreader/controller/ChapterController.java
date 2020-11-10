@@ -4,6 +4,7 @@ import com.graduation.bookreader.service.ChapterService;
 import com.graduation.bookreader.util.Result;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -23,7 +24,7 @@ public class ChapterController {
     private ChapterService chapterService;
 
     @GetMapping("/listChapterByBookId")
-    public Result listChapterByBookId(Integer bookId, Integer pageNum, Integer pageSize) {
+    public Result listChapterByBookId(Integer bookId, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
         return Result.success(chapterService.listChapterbyBookId(bookId, pageNum, pageSize));
     }
 

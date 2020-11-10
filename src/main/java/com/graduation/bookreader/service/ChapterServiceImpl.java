@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.model.Chapter;
 import com.graduation.bookreader.model.vo.ChapterDetailVo;
 import com.graduation.bookreader.repo.ChapterMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,6 +22,8 @@ import java.util.Arrays;
  */
 @Service
 public class ChapterServiceImpl implements ChapterService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ChapterServiceImpl.class);
 
     @Resource
     private ChapterMapper chapterMapper;
@@ -42,8 +46,8 @@ public class ChapterServiceImpl implements ChapterService {
         Chapter chapter = chapterMapper.selectById(chapterId);
         ChapterDetailVo chapterDetailVo = new ChapterDetailVo();
         chapterDetailVo.setId(chapterId);
-        //TODO 可能需要修改
-        String[] split = chapter.getContent().split("\r\n");
+
+        String[] split = chapter.getContent().split("   ");
         chapterDetailVo.setLines(Arrays.asList(split));
         return chapterDetailVo;
     }
