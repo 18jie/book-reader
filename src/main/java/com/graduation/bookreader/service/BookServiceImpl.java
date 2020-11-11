@@ -1,5 +1,6 @@
 package com.graduation.bookreader.service;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -50,7 +51,8 @@ public class BookServiceImpl implements BookService {
     public IPage<Book> listBookByType(Integer type, Integer pageNum, Integer pageSize) {
         QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
         if (Objects.nonNull(type)) {
-            queryWrapper.eq("type", BookTypeEnum.getTypeByType(type).name());
+            logger.info("书籍类型：{}", BookTypeEnum.getName(type));
+            queryWrapper.eq("book_type", BookTypeEnum.getName(type));
         }
         //全量书籍
         List<Book> books = bookMapper.selectList(queryWrapper);
@@ -76,7 +78,6 @@ public class BookServiceImpl implements BookService {
             }
             return 0;
         });
-        //TODO 这个分页的计算可能需要修改
         Page<Book> page = new Page<>(pageNum, pageSize);
         Integer pageStart = Math.min((pageNum - 1) * pageSize, books.size());
         logger.info("pageStart={},pageNum={}", pageStart, pageSize);
@@ -93,7 +94,7 @@ public class BookServiceImpl implements BookService {
         page.setTotal(books.size());
         page.setSize(bookList.size());
         page.setPages((int) Math.ceil((double) bookList.size() / pageSize));
-
+        logger.info("return data = {}", JSONUtils.toJSONString(page));
         return page;
     }
 
@@ -123,9 +124,9 @@ public class BookServiceImpl implements BookService {
     public UserFavoriteBookVo bookDetail(Integer bookId) {
         Book book = bookMapper.selectById(bookId);
         User user = userSession.localUser();
-        if(user == null){
+        if (user == null) {
             UserFavoriteBookVo userFavorite = new UserFavoriteBookVo();
-            BeanUtils.copyProperties(book,userFavorite);
+            BeanUtils.copyProperties(book, userFavorite);
         }
         UserFavorite userFavorite = new UserFavorite();
         userFavorite.setUserId(user.getId());

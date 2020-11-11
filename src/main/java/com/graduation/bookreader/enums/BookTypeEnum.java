@@ -77,4 +77,12 @@ public enum BookTypeEnum {
         }
         return null;
     }
+
+    public static String getName(Integer type){
+        BookTypeEnum typeByType = getTypeByType(type);
+        if(typeByType == null){
+            return null;
+        }
+        return typeByType.name;
+    }
 }
