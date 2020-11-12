@@ -1,6 +1,5 @@
 package com.graduation.bookreader.service;
 
-import com.alibaba.druid.support.json.JSONUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -68,20 +67,19 @@ public class BookServiceImpl implements BookService {
             weigthSort.add(key);
         }
         weigthSort.sort((o1, o2) -> {
-            logger.info(o1);
             int o1Int = Integer.parseInt(o1.substring(0, o1.indexOf("-")));
             int o2Int = Integer.parseInt(o2.substring(0, o2.indexOf("-")));
             if (o1Int > o2Int) {
-                return 1;
-            } else if (o1Int < o2Int) {
                 return -1;
+            } else if (o1Int < o2Int) {
+                return 1;
             }
             return 0;
         });
         Page<Book> page = new Page<>(pageNum, pageSize);
-        Integer pageStart = Math.min((pageNum - 1) * pageSize, books.size());
+        int pageStart = Math.min((pageNum - 1) * pageSize, books.size());
         logger.info("pageStart={},pageNum={}", pageStart, pageSize);
-        List<String> idStrs = weigthSort.subList(pageStart, pageSize);
+        List<String> idStrs = weigthSort.subList(pageStart, pageSize + pageStart);
 
         logger.info("{}", idStrs);
         List<Integer> bookIds = new ArrayList<>();
@@ -94,7 +92,6 @@ public class BookServiceImpl implements BookService {
         page.setTotal(books.size());
         page.setSize(bookList.size());
         page.setPages((int) Math.ceil((double) bookList.size() / pageSize));
-        logger.info("return data = {}", JSONUtils.toJSONString(page));
         return page;
     }
 

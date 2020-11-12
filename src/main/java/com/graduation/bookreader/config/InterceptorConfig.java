@@ -1,6 +1,7 @@
 package com.graduation.bookreader.config;
 
 import com.graduation.bookreader.filter.LoginIntercepter;
+import com.graduation.bookreader.filter.ReponseIntercepter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -19,5 +20,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginIntercepter()).addPathPatterns("/**").excludePathPatterns("/register");
+        registry.addInterceptor(new ReponseIntercepter()).addPathPatterns("/**");
     }
 }
