@@ -132,7 +132,6 @@ public class BookServiceImpl implements BookService {
         List<UserFavorite> userFavorites = userFavoriteMapper.selectList(queryWrapper);
         List<Integer> books = userFavorites.stream().map(UserFavorite::getBookId).collect(Collectors.toList());
 
-
         UserFavoriteBookVo userFavoriteBookVo = new UserFavoriteBookVo();
         BeanUtils.copyProperties(book, userFavorite);
         userFavoriteBookVo.setIsFavorite(books.contains(bookId));
