@@ -119,27 +119,25 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public UserFavoriteBookVo bookDetail(Integer bookId) {
-        Book book = bookMapper.selectById(bookId);
-        User user = userSession.localUser();
-        if (user == null) {
-            UserFavoriteBookVo userFavorite = new UserFavoriteBookVo();
-            BeanUtils.copyProperties(book, userFavorite);
-        }
-        UserFavorite userFavorite = new UserFavorite();
-        userFavorite.setUserId(user.getId());
-
-        QueryWrapper<UserFavorite> queryWrapper = new QueryWrapper<>(userFavorite);
-        List<UserFavorite> userFavorites = userFavoriteMapper.selectList(queryWrapper);
-        List<Integer> books = userFavorites.stream().map(UserFavorite::getBookId).collect(Collectors.toList());
-
         UserFavoriteBookVo userFavoriteBookVo = new UserFavoriteBookVo();
-        BeanUtils.copyProperties(book, userFavorite);
-        userFavoriteBookVo.setIsFavorite(books.contains(bookId));
-
+        Book book = bookMapper.selectById(bookId);
+        BeanUtils.copyProperties(book, userFavoriteBookVo);
         QueryWrapper<Chapter> chapterQueryWrapper = new QueryWrapper<>();
-        chapterQueryWrapper.select("id", "bookId", "chapterNum", "chapterName").eq("bookId", bookId);
+        chapterQueryWrapper.select("id", "book_id", "chapter_num", "chapter_name").eq("book_id", bookId);
         List<Chapter> chapters = chapterMapper.selectList(chapterQueryWrapper);
         userFavoriteBookVo.setChapters(chapters);
+
+        User user = userSession.localUser();
+        if (user != null) {
+            UserFavorite userFavorite = new UserFavorite();
+            userFavorite.setUserId(user.getId());
+            QueryWrapper<UserFavorite> queryWrapper = new QueryWrapper<>(userFavorite);
+            List<UserFavorite> userFavorites = userFavoriteMapper.selectList(queryWrapper);
+            List<Integer> books = userFavorites.stream().map(UserFavorite::getBookId).collect(Collectors.toList());
+            userFavoriteBookVo.setIsFavorite(books.contains(bookId));
+            return userFavoriteBookVo;
+        }
+
         return userFavoriteBookVo;
     }
 }
