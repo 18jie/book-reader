@@ -10,6 +10,7 @@ import com.graduation.bookreader.repo.BarrageMapper;
 import com.graduation.bookreader.repo.UserAuthorityMapper;
 import com.graduation.bookreader.util.UserSession;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -35,12 +36,12 @@ public class BarrageServiceImpl implements BarrageService {
     private UserSession userSession;
 
     @Override
-    public IPage<Barrage> listBarrage(Integer bookId, Integer chapterId, String contentCode, Integer pageNum, Integer pageSize) {
+    public IPage<Barrage> listBarrage(Integer chapterId, String comment, Integer pageNum, Integer pageSize) {
         Page<Barrage> page = new Page<>(pageNum, pageSize);
         Barrage barrage = new Barrage();
-        barrage.setBookId(bookId);
         barrage.setChapterId(chapterId);
-        barrage.setContentCode(contentCode);
+        //第1章 武魂觉醒
+        barrage.setContentCode(DigestUtils.md5DigestAsHex(comment.trim().getBytes()));
         barrage.setDeleted(0);
         //加入分级
         User user = userSession.localUser();

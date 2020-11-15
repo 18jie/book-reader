@@ -12,7 +12,7 @@ import com.graduation.bookreader.model.Barrage;
  */
 public interface BarrageService {
 
-    IPage<Barrage> listBarrage(Integer bookId, Integer chapterId, String contentCode, Integer pageNum, Integer pageSize);
+    IPage<Barrage> listBarrage(Integer chapterId, String comment, Integer pageNum, Integer pageSize);
 
     void addBarrage(Barrage barrage);
 

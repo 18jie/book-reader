@@ -19,6 +19,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class ChapterDetailVo extends BaseModel {
 
-    private List<String> lines;
+    private List<LineVo> lines;
 
 }
