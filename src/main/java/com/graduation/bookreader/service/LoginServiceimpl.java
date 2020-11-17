@@ -43,10 +43,18 @@ public class LoginServiceimpl implements LoginService {
     @Override
     public boolean logout(User usr, HttpServletRequest request) {
         User user = userSession.localUser();
-        if(user.getId().equals(usr.getId())){
+        if (user.getId().equals(usr.getId())) {
             request.getSession().removeAttribute("userId");
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean register(User user) {
+        String md5 = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
+        user.setPassword(md5);
+        userMapper.insert(user);
+        return true;
     }
 }
