@@ -29,10 +29,7 @@ public class LoginController {
 
     @PostMapping("/doLogin")
     public Result login(@RequestBody User user, HttpServletRequest httpServletRequest) {
-        if (loginService.doLogin(user, httpServletRequest)) {
-            return Result.success();
-        }
-        return Result.fail();
+        return Result.success(loginService.doLogin(user, httpServletRequest));
     }
 
     @PostMapping("/logout")

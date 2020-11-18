@@ -27,17 +27,16 @@ public class LoginServiceimpl implements LoginService {
     private UserSession userSession;
 
     @Override
-    public boolean doLogin(User user, HttpServletRequest request) {
+    public User doLogin(User user, HttpServletRequest request) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("userName", user.getUserName());
+        queryWrapper.eq("user_phone", user.getUserPhone());
         User realUser = userMapper.selectOne(queryWrapper);
         String md5 = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
         if (realUser.getPassword().equals(md5)) {
             request.getSession().setAttribute("userId", realUser.getId());
-        } else {
-            return true;
+            return realUser;
         }
-        return false;
+        return null;
     }
 
     @Override
