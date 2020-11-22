@@ -17,6 +17,6 @@ public interface LoginService {
 
     boolean logout(User usr, HttpServletRequest request);
 
-    boolean register(User user);
+    User isLogin();
 
 }

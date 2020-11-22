@@ -54,7 +54,12 @@ public class BarrageServiceImpl implements BarrageService {
             userAuthority.setDeleted(0);
             QueryWrapper<UserAuthority> queryWrapper = new QueryWrapper<>(userAuthority);
             UserAuthority real = userAuthorityMapper.selectOne(queryWrapper);
-            barrage.setLevel(real.getReadAuthority());
+            if (real == null) {
+                barrage.setLevel(1);
+            } else {
+                // TODO 用户注册的时候，默认给它一个权限,需要插入一条记录
+                barrage.setLevel(real.getReadAuthority());
+            }
         }
         QueryWrapper<Barrage> queryWrapper = new QueryWrapper<>(barrage);
 

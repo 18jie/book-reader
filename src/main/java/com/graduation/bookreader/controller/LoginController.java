@@ -5,13 +5,11 @@ import com.graduation.bookreader.service.LoginService;
 import com.graduation.bookreader.util.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Description:
@@ -40,12 +38,8 @@ public class LoginController {
         return Result.fail();
     }
 
-    @PostMapping("/register")
-    public Result register(@RequestBody User user) {
-        logger.info("user={}", user);
-        if (loginService.register(user)) {
-            return Result.success();
-        }
-        return Result.fail();
+    @GetMapping("/isLogin")
+    public Result isLogin(){
+        return Result.success(loginService.isLogin());
     }
 }
