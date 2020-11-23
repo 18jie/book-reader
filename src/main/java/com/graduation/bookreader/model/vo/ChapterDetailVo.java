@@ -21,4 +21,6 @@ public class ChapterDetailVo extends BaseModel {
 
     private List<LineVo> lines;
 
+    private Integer BookId;
+
 }

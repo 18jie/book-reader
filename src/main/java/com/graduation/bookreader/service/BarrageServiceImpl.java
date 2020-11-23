@@ -3,12 +3,15 @@ package com.graduation.bookreader.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.graduation.bookreader.algorithm.TextClassify;
 import com.graduation.bookreader.model.Barrage;
 import com.graduation.bookreader.model.User;
 import com.graduation.bookreader.model.UserAuthority;
 import com.graduation.bookreader.repo.BarrageMapper;
 import com.graduation.bookreader.repo.UserAuthorityMapper;
 import com.graduation.bookreader.util.UserSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -25,6 +28,8 @@ import java.util.Objects;
  */
 @Service
 public class BarrageServiceImpl implements BarrageService {
+
+    private final static Logger logger = LoggerFactory.getLogger(BarrageServiceImpl.class);
 
     @Resource
     private BarrageMapper barrageMapper;
@@ -57,7 +62,7 @@ public class BarrageServiceImpl implements BarrageService {
             if (real == null) {
                 barrage.setLevel(1);
             } else {
-                // TODO 用户注册的时候，默认给它一个权限,需要插入一条记录
+                // TODO 用户注册的时候，默认给它一个权限,需要插入一条记录,这里是有问题的，需要查询所有在它权限一下的评论
                 barrage.setLevel(real.getReadAuthority());
             }
         }
@@ -68,7 +73,12 @@ public class BarrageServiceImpl implements BarrageService {
 
     @Override
     public void addBarrage(Barrage barrage) {
-        // TODO 看是前端计算MD5还是后端计算
+        logger.info("barrage={}", barrage);
+        barrage.setContentCode(DigestUtils.md5DigestAsHex(barrage.getContentCode().trim().getBytes()));
+        User user = userSession.localUser();
+        barrage.setUserId(user.getId());
+        barrage.setLevel(TextClassify.classify(barrage.getContent()));
+        logger.info("barrage={}", barrage);
         barrage.setCreateTime(new Date());
         barrage.setUpdateTime(new Date());
         barrageMapper.insert(barrage);
