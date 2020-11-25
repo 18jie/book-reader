@@ -131,6 +131,7 @@ public class BookServiceImpl implements BookService {
         if (user != null) {
             UserFavorite userFavorite = new UserFavorite();
             userFavorite.setUserId(user.getId());
+            userFavorite.setDeleted(0);
             QueryWrapper<UserFavorite> queryWrapper = new QueryWrapper<>(userFavorite);
             List<UserFavorite> userFavorites = userFavoriteMapper.selectList(queryWrapper);
             List<Integer> books = userFavorites.stream().map(UserFavorite::getBookId).collect(Collectors.toList());

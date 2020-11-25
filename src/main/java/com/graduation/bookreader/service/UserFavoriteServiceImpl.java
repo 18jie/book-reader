@@ -47,4 +47,24 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         List<Book> books = bookMapper.selectList(queryWrapper);
         return books;
     }
+
+    @Override
+    public boolean addOrRemoveFavorite(Integer bookId) {
+        Book book = bookMapper.selectById(bookId);
+        if (book == null) {
+            return false;
+        }
+        UserFavorite userFavorite = new UserFavorite();
+        userFavorite.setBookId(bookId);
+        userFavorite.setUserId(userSession.localUser().getId());
+        userFavorite.setDeleted(0);
+        UserFavorite userFavorite1 = userFavoriteMapper.selectOne(new QueryWrapper<>(userFavorite));
+        if (userFavorite1 != null) {
+            userFavorite1.setDeleted(1);
+            userFavoriteMapper.updateById(userFavorite1);
+            return true;
+        }
+        userFavoriteMapper.insert(userFavorite);
+        return true;
+    }
 }

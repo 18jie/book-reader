@@ -27,4 +27,9 @@ public class UserFavoriteController {
         return Result.success(userFavoriteService.list());
     }
 
+    @GetMapping("/addOrRemoveFavorite")
+    public Result addOrRemoveFavorite(Integer bookId) {
+        return Result.success(userFavoriteService.addOrRemoveFavorite(bookId));
+    }
 }
+

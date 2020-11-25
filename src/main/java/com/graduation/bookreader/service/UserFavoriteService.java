@@ -15,4 +15,6 @@ public interface UserFavoriteService {
 
     List<Book> list();
 
+    boolean addOrRemoveFavorite(Integer bookId);
+
 }
