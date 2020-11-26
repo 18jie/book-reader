@@ -2,21 +2,27 @@ package com.graduation.bookreader.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.algorithm.TextClassify;
 import com.graduation.bookreader.model.Barrage;
 import com.graduation.bookreader.model.User;
 import com.graduation.bookreader.model.UserAuthority;
+import com.graduation.bookreader.model.vo.BarrageVo;
 import com.graduation.bookreader.repo.BarrageMapper;
 import com.graduation.bookreader.repo.UserAuthorityMapper;
+import com.graduation.bookreader.repo.UserMapper;
 import com.graduation.bookreader.util.UserSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -38,10 +44,13 @@ public class BarrageServiceImpl implements BarrageService {
     private UserAuthorityMapper userAuthorityMapper;
 
     @Resource
+    private UserMapper userMapper;
+
+    @Resource
     private UserSession userSession;
 
     @Override
-    public IPage<Barrage> listBarrage(Integer chapterId, String comment, Integer pageNum, Integer pageSize) {
+    public IPage<BarrageVo> listBarrage(Integer chapterId, String comment, Integer pageNum, Integer pageSize) {
         Page<Barrage> page = new Page<>(pageNum, pageSize);
         Barrage barrage = new Barrage();
         barrage.setChapterId(chapterId);
@@ -52,7 +61,7 @@ public class BarrageServiceImpl implements BarrageService {
         User user = userSession.localUser();
         if (Objects.isNull(user)) {
             //没有登录的情况下，只可以看1级
-            barrage.setLevel(1);
+            barrage.setLevel(2);
         } else {
             UserAuthority userAuthority = new UserAuthority();
             userAuthority.setUserId(user.getId());
@@ -60,15 +69,29 @@ public class BarrageServiceImpl implements BarrageService {
             QueryWrapper<UserAuthority> queryWrapper = new QueryWrapper<>(userAuthority);
             UserAuthority real = userAuthorityMapper.selectOne(queryWrapper);
             if (real == null) {
-                barrage.setLevel(1);
+                barrage.setLevel(2);
             } else {
-                // TODO 用户注册的时候，默认给它一个权限,需要插入一条记录,这里是有问题的，需要查询所有在它权限一下的评论
                 barrage.setLevel(real.getReadAuthority());
             }
         }
-        QueryWrapper<Barrage> queryWrapper = new QueryWrapper<>(barrage);
+        QueryWrapper<Barrage> queryWrapper = new QueryWrapper<>();
+        queryWrapper.le("level", barrage.getLevel()).eq("deleted", 0);
+        Page<Barrage> barragePage = barrageMapper.selectPage(page, queryWrapper);
+        List<Barrage> records = barragePage.getRecords();
+        List<BarrageVo> barrageVos = new ArrayList<>();
+        records.forEach(record -> {
+            BarrageVo barrageVo = new BarrageVo();
+            BeanUtils.copyProperties(record, barrageVo);
+            User user1 = userMapper.selectById(record.getUserId());
+            barrageVo.setUserName(user1.getUserName());
+            barrageVos.add(barrageVo);
+        });
+        Page<BarrageVo> page1 = new Page<>(pageNum, pageSize);
+        page1.setRecords(barrageVos);
+        page1.setTotal(barragePage.getTotal());
+        page1.setCurrent(barragePage.getCurrent());
 
-        return barrageMapper.selectPage(page, queryWrapper);
+        return page1;
     }
 
     @Override
