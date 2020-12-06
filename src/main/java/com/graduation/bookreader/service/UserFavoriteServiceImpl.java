@@ -7,6 +7,8 @@ import com.graduation.bookreader.model.UserFavorite;
 import com.graduation.bookreader.repo.BookMapper;
 import com.graduation.bookreader.repo.UserFavoriteMapper;
 import com.graduation.bookreader.util.UserSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UserFavoriteServiceImpl implements UserFavoriteService {
+
+    private final static Logger logger = LoggerFactory.getLogger(UserFavoriteServiceImpl.class);
 
     @Resource
     private BookMapper bookMapper;
@@ -45,6 +49,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("id", bookIds);
         List<Book> books = bookMapper.selectList(queryWrapper);
+        logger.info("favorite books:{}", books);
         return books;
     }
 

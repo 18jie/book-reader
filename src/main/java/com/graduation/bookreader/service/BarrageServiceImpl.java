@@ -56,7 +56,6 @@ public class BarrageServiceImpl implements BarrageService {
         barrage.setChapterId(chapterId);
         //第1章 武魂觉醒
         barrage.setContentCode(DigestUtils.md5DigestAsHex(comment.trim().getBytes()));
-        barrage.setDeleted(0);
         //加入分级
         User user = userSession.localUser();
         if (Objects.isNull(user)) {
@@ -75,7 +74,7 @@ public class BarrageServiceImpl implements BarrageService {
             }
         }
         QueryWrapper<Barrage> queryWrapper = new QueryWrapper<>();
-        queryWrapper.le("level", barrage.getLevel()).eq("deleted", 0);
+        queryWrapper.le("level", barrage.getLevel()).eq("deleted", 0).eq("content_code", barrage.getContentCode());
         Page<Barrage> barragePage = barrageMapper.selectPage(page, queryWrapper);
         List<Barrage> records = barragePage.getRecords();
         List<BarrageVo> barrageVos = new ArrayList<>();
