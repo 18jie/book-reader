@@ -2,7 +2,6 @@ package com.graduation.bookreader.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.algorithm.TextClassify;
 import com.graduation.bookreader.model.Barrage;
@@ -96,9 +95,11 @@ public class BarrageServiceImpl implements BarrageService {
     @Override
     public void addBarrage(Barrage barrage) {
         logger.info("barrage={}", barrage);
+        //1. 对文字语言编码  md5
         barrage.setContentCode(DigestUtils.md5DigestAsHex(barrage.getContentCode().trim().getBytes()));
         User user = userSession.localUser();
         barrage.setUserId(user.getId());
+        // 通过神经网络判断分级
         barrage.setLevel(TextClassify.classify(barrage.getContent()));
         logger.info("barrage={}", barrage);
         barrage.setCreateTime(new Date());

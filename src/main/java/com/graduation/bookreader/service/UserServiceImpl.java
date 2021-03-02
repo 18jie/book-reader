@@ -45,6 +45,9 @@ public class UserServiceImpl implements UserService {
             real.setDeleted(1);
             userAuthorityMapper.updateById(real);
         }
+        //判断年龄
+        //区别年龄段
+        //往权限表插入一条数据
         return true;
     }
 
