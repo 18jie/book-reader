@@ -41,6 +41,7 @@ public class LoginServiceimpl implements LoginService {
             logger.info("存入session={}", realUser.getId());
             request.getSession().setAttribute("userId", realUser.getId());
             realUser.setLoginTime(new Date(System.currentTimeMillis()));
+            realUser.setLoginCount(realUser.getLoginCount() + 1);
             userMapper.updateById(realUser);
             return realUser;
         }

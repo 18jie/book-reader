@@ -6,33 +6,23 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.io.Serializable;
-import java.sql.Date;
-
 /**
  * Description:
- * 用户表
  * <p>
  * Author: 丰杰
- * Date: 2020-10-25
- * Time: 19:03
+ * Date: 2021-03-02
+ * Time: 22:22
  */
 @TableName("b_user")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class User extends BaseModel implements Serializable {
+public class Message extends BaseModel {
 
-    private String username;
+    private Integer userId;
 
-    private String phone;
+    private String msg;
 
-    private Integer age;
-
-    private String password;
-
-    private Date loginTime;
-
-    private Integer loginCount;
+    private Integer status;
 
 }

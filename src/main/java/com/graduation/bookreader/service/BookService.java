@@ -50,4 +50,9 @@ public interface BookService {
      */
     UserFavoriteBookVo bookDetail(Integer bookId);
 
+    /**
+     * 通过不同的类型来统计数量
+     */
+    void countByType();
+
 }

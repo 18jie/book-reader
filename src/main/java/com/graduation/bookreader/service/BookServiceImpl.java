@@ -1,5 +1,6 @@
 package com.graduation.bookreader.service;
 
+import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -141,4 +142,11 @@ public class BookServiceImpl implements BookService {
 
         return userFavoriteBookVo;
     }
+
+    @Override
+    public void countByType() {
+        // TODO
+//        bookMapper.selectList()
+    }
+
 }
