@@ -1,26 +1,22 @@
 package com.graduation.bookreader.model.vo;
 
-import com.graduation.bookreader.model.base.BaseModel;
+import com.graduation.bookreader.model.Barrage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.util.List;
 
 /**
  * Description:
  * <p>
  * Author: 丰杰
- * Date: 2020-11-09
- * Time: 17:18
+ * Date: 2020-11-26
+ * Time: 22:48
  */
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class ChapterDetailVo extends BaseModel {
+public class BarrageVo extends Barrage {
 
-    private List<LineVo> lines;
-
-    private Integer BookId;
+    private String userName;
 
 }

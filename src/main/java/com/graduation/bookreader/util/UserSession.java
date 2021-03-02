@@ -2,6 +2,8 @@ package com.graduation.bookreader.util;
 
 import com.graduation.bookreader.model.User;
 import com.graduation.bookreader.repo.UserMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -16,13 +18,15 @@ import javax.annotation.Resource;
  */
 @Component
 public class UserSession {
+    private final static Logger logger = LoggerFactory.getLogger(UserSession.class);
 
     @Resource
     private UserMapper userMapper;
 
-    public User localUser(){
+    public User localUser() {
         Integer userId = UserThreadLocalContext.getUser();
-        if(userId == null){
+        logger.info("UserSession userId = {}", userId);
+        if (userId == null) {
             return null;
         }
         return userMapper.selectById(userId);

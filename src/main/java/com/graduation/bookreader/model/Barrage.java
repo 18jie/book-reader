@@ -26,6 +26,8 @@ public class Barrage extends BaseModel implements Serializable {
 
     private Integer chapterId;
 
+    private Integer userId;
+
     private String content;
 
     private String contentCode;

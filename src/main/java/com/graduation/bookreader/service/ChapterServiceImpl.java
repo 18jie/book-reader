@@ -71,6 +71,7 @@ public class ChapterServiceImpl implements ChapterService {
             lineVos.add(lineVo);
         }
         chapterDetailVo.setLines(lineVos);
+        chapterDetailVo.setBookId(chapter.getBookId());
         return chapterDetailVo;
     }
 }

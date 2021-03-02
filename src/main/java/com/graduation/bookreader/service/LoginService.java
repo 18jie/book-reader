@@ -13,8 +13,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface LoginService {
 
-    boolean doLogin(User user, HttpServletRequest request);
+    User doLogin(User user, HttpServletRequest request);
 
     boolean logout(User usr, HttpServletRequest request);
+
+    User isLogin();
 
 }
