@@ -20,7 +20,6 @@ import java.util.Date;
 @EqualsAndHashCode
 public class BaseModel {
 
-//    @TableId(type = IdType.AUTO)
     private Integer id;
 
     private Date createTime;

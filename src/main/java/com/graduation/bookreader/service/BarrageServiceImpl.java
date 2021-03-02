@@ -81,7 +81,7 @@ public class BarrageServiceImpl implements BarrageService {
             BarrageVo barrageVo = new BarrageVo();
             BeanUtils.copyProperties(record, barrageVo);
             User user1 = userMapper.selectById(record.getUserId());
-            barrageVo.setUserName(user1.getUserName());
+            barrageVo.setUserName(user1.getUsername());
             barrageVos.add(barrageVo);
         });
         Page<BarrageVo> page1 = new Page<>(pageNum, pageSize);

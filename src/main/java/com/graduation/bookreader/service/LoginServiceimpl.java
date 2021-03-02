@@ -11,6 +11,7 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Date;
 
 /**
  * Description:
@@ -31,13 +32,16 @@ public class LoginServiceimpl implements LoginService {
 
     @Override
     public User doLogin(User user, HttpServletRequest request) {
+        logger.info("user={}", user);
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_phone", user.getUserPhone());
+        queryWrapper.eq("phone", user.getPhone());
         User realUser = userMapper.selectOne(queryWrapper);
         String md5 = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
         if (realUser.getPassword().equals(md5)) {
             logger.info("存入session={}", realUser.getId());
             request.getSession().setAttribute("userId", realUser.getId());
+            realUser.setLoginTime(new Date(System.currentTimeMillis()));
+            userMapper.updateById(realUser);
             return realUser;
         }
         return null;
