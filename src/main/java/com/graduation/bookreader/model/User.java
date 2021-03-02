@@ -22,9 +22,9 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 public class User extends BaseModel implements Serializable {
 
-    private String userName;
+    private String username;
 
-    private String userPhone;
+    private String phone;
 
     private Integer age;
 
