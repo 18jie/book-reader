@@ -13,7 +13,7 @@ class BookReaderApplicationTests {
 
     @Test
     void contextLoads() {
-        String s = DigestUtils.md5DigestAsHex("第1章 武魂觉醒 ".trim().getBytes());
+        String s = DigestUtils.md5DigestAsHex("123456".trim().getBytes());
         System.out.println(s);
     }
 

@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 /**
  * Description:
@@ -29,5 +30,7 @@ public class User extends BaseModel implements Serializable {
     private Integer age;
 
     private String password;
+
+    private Date loginTime;
 
 }
