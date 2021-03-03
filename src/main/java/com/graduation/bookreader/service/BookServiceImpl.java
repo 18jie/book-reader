@@ -146,7 +146,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void countByType() {
         // TODO
-//        bookMapper.selectList()
+        List<Map<Integer, Integer>> maps = bookMapper.bookCountByType();
     }
 
 }

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description:
@@ -19,6 +20,6 @@ import java.util.List;
 public interface BookMapper extends BaseMapper<Book> {
 
     @Select("select type,count(1) from b_book where deleted = 0")
-    List<Book> bookCountByType();
+    List<Map<Integer,Integer>> bookCountByType();
 
 }
