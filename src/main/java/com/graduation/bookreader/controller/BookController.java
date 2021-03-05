@@ -6,6 +6,10 @@ import com.graduation.bookreader.util.Result;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Description:
@@ -49,6 +53,27 @@ public class BookController {
     @PostMapping("updateBook")
     public Result updateBook(@RequestBody Book book) {
         return null;
+    }
+
+    @GetMapping("/hostTypes")
+    public Result hotTypes() {
+        List<Map<String, Object>> hostTypes = new ArrayList<>();
+        Map<String, Object> one = new HashMap<>();
+        one.put("id", 1);
+        one.put("_id", 1);
+        one.put("title", "火爆全网");
+        Map<String, Object> two = new HashMap<>();
+        two.put("id", 2);
+        two.put("_id", 2);
+        two.put("title", "最新更新");
+        hostTypes.add(one);
+        hostTypes.add(two);
+        return Result.success(hostTypes);
+    }
+
+    @GetMapping("/hotBooks")
+    public Result hostBooks(Integer type) {
+        return Result.success(bookService.hotBooks(type));
     }
 
 }

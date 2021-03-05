@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.enums.BookTypeEnum;
 import com.graduation.bookreader.model.*;
+import com.graduation.bookreader.model.vo.BookVo;
 import com.graduation.bookreader.model.vo.UserFavoriteBookVo;
 import com.graduation.bookreader.repo.BookMapper;
 import com.graduation.bookreader.repo.ChapterMapper;
@@ -147,6 +148,41 @@ public class BookServiceImpl implements BookService {
     public void countByType() {
         // TODO
         List<Map<Integer, Integer>> maps = bookMapper.bookCountByType();
+    }
+
+    @Override
+    public List<BookVo> hotBooks(Integer type) {
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        List<Book> bookList = new ArrayList<>();
+        List<Chapter> chapters = new ArrayList<>();
+        if (type == 1) {
+            QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
+            queryWrapper.apply("select * from b_book where deleted = 0 order by book_click_count desc limit 10");
+            bookList = bookMapper.selectList(queryWrapper);
+        } else {
+            QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
+            queryWrapper.apply("select * from b_book where deleted = 0 order by book_update_time desc limit 10");
+            bookList = bookMapper.selectList(queryWrapper);
+        }
+        List<Integer> ids = bookList.stream().map(Book::getId).collect(Collectors.toList());
+        Map<Integer, String> chaptersMap = this.getChaptersByBookIds(ids);
+        List<BookVo> bookVos = new ArrayList<>();
+        bookList.forEach(book -> {
+            String content = chaptersMap.get(book.getId());
+            // TODO 用book拼接bookVo
+        });
+        return null;
+    }
+
+    private Map<Integer, String> getChaptersByBookIds(List<Integer> bookIds) {
+        Map<Integer, String> chapterMap = new HashMap<>();
+        bookIds.forEach(id -> {
+            QueryWrapper<Chapter> chapterQueryWrapper = new QueryWrapper<>();
+            chapterQueryWrapper.eq("book_id", id).orderByAsc("id");
+            Chapter chapter = chapterMapper.selectOne(chapterQueryWrapper);
+            chapterMap.put(id, chapter.getContent());
+        });
+        return chapterMap;
     }
 
 }

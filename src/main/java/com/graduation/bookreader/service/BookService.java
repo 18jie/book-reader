@@ -2,7 +2,11 @@ package com.graduation.bookreader.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.graduation.bookreader.model.Book;
+import com.graduation.bookreader.model.vo.BookVo;
 import com.graduation.bookreader.model.vo.UserFavoriteBookVo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Description:
@@ -54,5 +58,11 @@ public interface BookService {
      * 通过不同的类型来统计数量
      */
     void countByType();
+
+    /**
+     * 获取主页分类
+     * @return 主页分类
+     */
+    List<BookVo> hotBooks(Integer type);
 
 }
