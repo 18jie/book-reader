@@ -4,10 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.model.Barrage;
+import com.graduation.bookreader.model.Book;
 import com.graduation.bookreader.model.Chapter;
 import com.graduation.bookreader.model.vo.ChapterDetailVo;
+import com.graduation.bookreader.model.vo.ChapterVo;
+import com.graduation.bookreader.model.vo.ContentVo;
 import com.graduation.bookreader.model.vo.LineVo;
 import com.graduation.bookreader.repo.BarrageMapper;
+import com.graduation.bookreader.repo.BookMapper;
 import com.graduation.bookreader.repo.ChapterMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +37,9 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Resource
     private ChapterMapper chapterMapper;
+
+    @Resource
+    private BookMapper bookMapper;
 
     @Resource
     private BarrageMapper barrageMapper;
@@ -73,5 +80,43 @@ public class ChapterServiceImpl implements ChapterService {
         chapterDetailVo.setLines(lineVos);
         chapterDetailVo.setBookId(chapter.getBookId());
         return chapterDetailVo;
+    }
+
+    @Override
+    public List<ChapterVo> chapterVosByBookId(Integer bookId) {
+        QueryWrapper<Chapter> chapterQueryWrapper = new QueryWrapper<>();
+        chapterQueryWrapper.select("id", "chapter_name").eq("book_id", bookId);
+        List<Chapter> chapters = chapterMapper.selectList(chapterQueryWrapper);
+
+        Book book = bookMapper.selectById(bookId);
+        List<ChapterVo> chapterVos = new ArrayList<>();
+        chapters.forEach(chapter -> {
+            chapterVos.add(this.buildChapterVo(chapter, book.getBookName()));
+        });
+        return chapterVos;
+    }
+
+    @Override
+    public ContentVo chapterContentVoByChapterId(Integer chapterId) {
+        QueryWrapper<Chapter> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<Chapter> first = queryWrapper.eq("id", chapterId);
+        Chapter chapter = chapterMapper.selectOne(first);
+
+        ContentVo contentVo = new ContentVo();
+        contentVo.setChapterTitle(chapter.getChapterName());
+        contentVo.setContent(chapter.getContent());
+        contentVo.setOrder(chapterId);
+        return contentVo;
+    }
+
+    private ChapterVo buildChapterVo(Chapter chapter, String bookName) {
+        ChapterVo chapterVo = new ChapterVo();
+        chapterVo.setId(chapter.getId());
+        chapterVo.setBookName(bookName);
+        chapterVo.setIsVip(false);
+        chapterVo.setLink(chapter.getId());
+        chapterVo.setTitle(chapter.getChapterName());
+        chapterVo.setOrder(chapter.getId());
+        return chapterVo;
     }
 }

@@ -3,6 +3,10 @@ package com.graduation.bookreader.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.graduation.bookreader.model.Chapter;
 import com.graduation.bookreader.model.vo.ChapterDetailVo;
+import com.graduation.bookreader.model.vo.ChapterVo;
+import com.graduation.bookreader.model.vo.ContentVo;
+
+import java.util.List;
 
 /**
  * Description:
@@ -26,5 +30,19 @@ public interface ChapterService {
     Chapter getChapterById(Integer id);
 
     ChapterDetailVo chapterDetail(Integer chapterId);
+
+    /**
+     * 通过书籍id查询章节vo
+     * @param bookId 书籍id
+     * @return
+     */
+    List<ChapterVo> chapterVosByBookId(Integer bookId);
+
+    /**
+     * 通过章节id获取章节内容
+     * @param chapterId 章节id
+     * @return 章节内容
+     */
+    ContentVo chapterContentVoByChapterId(Integer chapterId);
 
 }

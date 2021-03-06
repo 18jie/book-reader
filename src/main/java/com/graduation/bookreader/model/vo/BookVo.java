@@ -1,5 +1,8 @@
 package com.graduation.bookreader.model.vo;
 
+import lombok.Data;
+import lombok.ToString;
+
 /**
  * Description:
  * <p>
@@ -7,6 +10,8 @@ package com.graduation.bookreader.model.vo;
  * Date: 2021-03-05
  * Time: 23:29
  */
+@Data
+@ToString
 public class BookVo {
 
     private String _id;
@@ -26,6 +31,8 @@ public class BookVo {
     private Integer latelyFollower;
 
     private String shortIntro;
+
+    private String longIntro;
 
     private Integer introLimit;
 

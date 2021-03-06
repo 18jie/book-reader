@@ -2,10 +2,7 @@ package com.graduation.bookreader.controller;
 
 import com.graduation.bookreader.service.ChapterService;
 import com.graduation.bookreader.util.Result;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -36,6 +33,16 @@ public class ChapterController {
     @GetMapping("/chapterDetail")
     public Result chapterDetail(Integer chapterId) {
         return Result.success(chapterService.chapterDetail(chapterId));
+    }
+
+    @GetMapping("/chaptersByBookId")
+    public Result chaptersByBookId(Integer bookId) {
+        return Result.success(chapterService.chapterVosByBookId(bookId));
+    }
+
+    @GetMapping("/chapterContent/{chapterId}")
+    public Result chapterContent(@PathVariable("chapterId") Integer chapterId) {
+        return Result.success(chapterService.chapterContentVoByChapterId(chapterId));
     }
 
 }

@@ -65,4 +65,11 @@ public interface BookService {
      */
     List<BookVo> hotBooks(Integer type);
 
+    /**
+     * 按照id获取book
+     * @param id
+     * @return
+     */
+    BookVo bookVoById(Integer id);
+
 }

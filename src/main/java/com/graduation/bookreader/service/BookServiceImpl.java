@@ -169,9 +169,18 @@ public class BookServiceImpl implements BookService {
         List<BookVo> bookVos = new ArrayList<>();
         bookList.forEach(book -> {
             String content = chaptersMap.get(book.getId());
-            // TODO 用book拼接bookVo
+            bookVos.add(this.buildBookVo(book, content));
         });
-        return null;
+        return bookVos;
+    }
+
+    @Override
+    public BookVo bookVoById(Integer id) {
+        Book book = bookMapper.selectById(id);
+        QueryWrapper<Chapter> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("book_id", id);
+        Chapter chapter = chapterMapper.selectOne(queryWrapper);
+        return this.buildBookVo(book,chapter.getContent());
     }
 
     private Map<Integer, String> getChaptersByBookIds(List<Integer> bookIds) {
@@ -183,6 +192,19 @@ public class BookServiceImpl implements BookService {
             chapterMap.put(id, chapter.getContent());
         });
         return chapterMap;
+    }
+
+    private BookVo buildBookVo(Book book, String intro) {
+        BookVo bookVo = new BookVo();
+        bookVo.set_id(String.valueOf(book.getId()));
+        bookVo.setAuthor(book.getBookWriter());
+        bookVo.setCover(book.getBookImgUrl());
+        bookVo.setIsSerial(true);
+        bookVo.setLatelyFollower(book.getBookClickCount());
+        bookVo.setShortIntro(intro);
+        bookVo.setLongIntro(intro);
+        bookVo.setIntroLimit(60);
+        return bookVo;
     }
 
 }
