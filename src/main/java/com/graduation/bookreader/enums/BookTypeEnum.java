@@ -38,22 +38,22 @@ public enum BookTypeEnum {
     /**
      * 游戏竞技
      */
-    GAME_COMPETITION("游戏竞技", 6),
+//    GAME_COMPETITION("游戏竞技", 6),
 
     /**
      * 科幻灵异
      */
-    SCIENCE_FICTION_SUPERNATURAL("科幻灵异", 7),
+    SCIENCE_FICTION_SUPERNATURAL("科幻灵异", 7);
 
     /**
      * 美文同人
      */
-    AMERICAN_COLLEAGUES("美文同人", 8),
+//    AMERICAN_COLLEAGUES("美文同人", 8);
 
     /**
      * 剧本教程
      */
-    SCRIPT_TUTORIAL("剧本教程", 9);
+//    SCRIPT_TUTORIAL("剧本教程", 9);
 
     /**
      * 中文解释
@@ -84,5 +84,22 @@ public enum BookTypeEnum {
             return null;
         }
         return typeByType.name;
+    }
+
+    public static Integer getType(String name){
+        for (BookTypeEnum value : BookTypeEnum.values()) {
+            if(value.name.equals(name)){
+                return value.type;
+            }
+        }
+        return null;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public String getName() {
+        return name;
     }
 }

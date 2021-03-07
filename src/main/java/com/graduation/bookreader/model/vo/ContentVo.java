@@ -20,4 +20,6 @@ public class ContentVo {
 
     private Integer order;
 
+    private Boolean isVip;
+
 }

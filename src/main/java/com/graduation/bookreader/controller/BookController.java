@@ -1,6 +1,7 @@
 package com.graduation.bookreader.controller;
 
 import com.graduation.bookreader.model.Book;
+import com.graduation.bookreader.model.vo.BookDetailVo;
 import com.graduation.bookreader.model.vo.BookVo;
 import com.graduation.bookreader.service.BookService;
 import com.graduation.bookreader.util.Result;
@@ -73,14 +74,36 @@ public class BookController {
         return Result.success(hostTypes);
     }
 
-    @GetMapping("/hotBooks")
-    public Result<List<BookVo>> hostBooks(Integer type) {
+    @GetMapping("/hotBooks/{type}")
+    public Result<List<BookVo>> hostBooks(@PathVariable Integer type) {
         return Result.success(bookService.hotBooks(type));
     }
 
     @GetMapping("/bookVo/{id}")
-    public Result<BookVo> bookVo(@PathVariable("id") Integer id) {
+    public Result<BookVo> bookVo(@PathVariable Integer id) {
         return Result.success(bookService.bookVoById(id));
     }
+
+    @GetMapping("/bookDetailVo/{id}")
+    public Result<BookDetailVo> bookDetailVo(@PathVariable Integer id) {
+        return Result.success(bookService.bookDetailVo(id));
+    }
+
+    @GetMapping("/searchBookByName")
+    public Result searchBookByName(String name) {
+        return Result.success(bookService.searchBookByName(name));
+    }
+
+
+    @GetMapping("/bookVosByPage/{type}/{pageNum}")
+    public Result bookVosByPage(@PathVariable Integer type, @PathVariable Integer pageNum) {
+        return Result.success(bookService.bookVosByPage(type, pageNum));
+    }
+
+    @GetMapping("/bookTypes")
+    public Result bookTypes(){
+        return Result.success(bookService.getBookTypes());
+    }
+
 
 }

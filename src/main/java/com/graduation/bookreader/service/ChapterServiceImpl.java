@@ -90,9 +90,12 @@ public class ChapterServiceImpl implements ChapterService {
 
         Book book = bookMapper.selectById(bookId);
         List<ChapterVo> chapterVos = new ArrayList<>();
-        chapters.forEach(chapter -> {
-            chapterVos.add(this.buildChapterVo(chapter, book.getBookName()));
-        });
+        int order = 1;
+        for (Chapter chapter : chapters) {
+            ChapterVo chapterVo = this.buildChapterVo(chapter, book.getBookName());
+            chapterVo.setOrder(order++);
+            chapterVos.add(chapterVo);
+        }
         return chapterVos;
     }
 
@@ -102,10 +105,15 @@ public class ChapterServiceImpl implements ChapterService {
         QueryWrapper<Chapter> first = queryWrapper.eq("id", chapterId);
         Chapter chapter = chapterMapper.selectOne(first);
 
+        QueryWrapper<Chapter> firstOneQuery = new QueryWrapper<>();
+        firstOneQuery.eq("book_id",chapter.getBookId()).orderByAsc("id").last("limit 1");
+        Chapter firstOne = chapterMapper.selectOne(firstOneQuery);
+
         ContentVo contentVo = new ContentVo();
         contentVo.setChapterTitle(chapter.getChapterName());
         contentVo.setContent(chapter.getContent());
-        contentVo.setOrder(chapterId);
+        contentVo.setOrder(chapterId - firstOne.getId() + 1);
+        contentVo.setIsVip(false);
         return contentVo;
     }
 

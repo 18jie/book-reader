@@ -1,7 +1,9 @@
 package com.graduation.bookreader.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.model.Book;
+import com.graduation.bookreader.model.vo.BookDetailVo;
 import com.graduation.bookreader.model.vo.BookVo;
 import com.graduation.bookreader.model.vo.UserFavoriteBookVo;
 
@@ -49,6 +51,7 @@ public interface BookService {
 
     /**
      * 书籍详情，如果用户已经登录，显示是否收藏
+     *
      * @param bookId
      * @return
      */
@@ -61,15 +64,32 @@ public interface BookService {
 
     /**
      * 获取主页分类
+     *
      * @return 主页分类
      */
     List<BookVo> hotBooks(Integer type);
 
     /**
      * 按照id获取book
+     *
      * @param id
      * @return
      */
     BookVo bookVoById(Integer id);
+
+    /**
+     * 书籍详情
+     *
+     * @param id 书籍id
+     * @return 返回
+     */
+    BookDetailVo bookDetailVo(Integer id);
+
+    List<Book> searchBookByName(String name);
+
+    Page<BookVo> bookVosByPage(Integer type, Integer pageNum);
+
+    List<Map<String,Object>> getBookTypes();
+
 
 }
