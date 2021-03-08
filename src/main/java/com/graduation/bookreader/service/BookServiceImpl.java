@@ -14,6 +14,7 @@ import com.graduation.bookreader.repo.ChapterMapper;
 import com.graduation.bookreader.repo.UserFavoriteMapper;
 import com.graduation.bookreader.repo.WeightMapper;
 import com.graduation.bookreader.util.UserSession;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -50,52 +51,58 @@ public class BookServiceImpl implements BookService {
     private ChapterMapper chapterMapper;
 
     @Override
-    public IPage<Book> listBookByType(Integer type, Integer pageNum, Integer pageSize) {
+    public IPage<Book> listBookByType(Integer type, String name, Integer pageNum, Integer pageSize) {
         QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
+        Page<Book> page = new Page<>(pageNum, pageSize);
+        queryWrapper.eq("deleted", 0);
         if (Objects.nonNull(type)) {
             logger.info("书籍类型：{}", BookTypeEnum.getName(type));
             queryWrapper.eq("book_type", BookTypeEnum.getName(type));
         }
-        //全量书籍
-        List<Book> books = bookMapper.selectList(queryWrapper);
-        QueryWrapper<Weight> weightQueryWrapper = new QueryWrapper<>();
-        //权重
-        weightQueryWrapper.eq("deleted", 0);
-        Weight weight = weightMapper.selectOne(weightQueryWrapper);
-        weight = weight == null ? defaultWeight() : weight;
-        List<String> weigthSort = new ArrayList<>();
-        for (Book book : books) {
-            String key = (book.getBookClickCount() * weight.getClick() + book.getFavoriteCount() * weight.getFavorite() +
-                    book.getLikeCount() * weight.getWLike()) + "-" + book.getId();
-            weigthSort.add(key);
+        if (StringUtils.isNotBlank(name)) {
+            queryWrapper.eq("book_name", name);
         }
-        weigthSort.sort((o1, o2) -> {
-            int o1Int = Integer.parseInt(o1.substring(0, o1.indexOf("-")));
-            int o2Int = Integer.parseInt(o2.substring(0, o2.indexOf("-")));
-            if (o1Int > o2Int) {
-                return -1;
-            } else if (o1Int < o2Int) {
-                return 1;
-            }
-            return 0;
-        });
-        Page<Book> page = new Page<>(pageNum, pageSize);
-        int pageStart = Math.min((pageNum - 1) * pageSize, books.size());
-        logger.info("pageStart={},pageNum={}", pageStart, pageSize);
-        List<String> idStrs = weigthSort.subList(pageStart, pageSize + pageStart);
-
-        logger.info("{}", idStrs);
-        List<Integer> bookIds = new ArrayList<>();
-        idStrs.forEach(id -> {
-            String realId = id.substring(id.indexOf("-") + 1);
-            bookIds.add(Integer.parseInt(realId));
-        });
-        List<Book> bookList = bookMapper.selectBatchIds(bookIds);
-        page.setRecords(bookList);
-        page.setTotal(books.size());
-        page.setSize(bookList.size());
-        page.setPages((int) Math.ceil((double) bookList.size() / pageSize));
-        return page;
+        //全量书籍
+        Page<Book> page1 = bookMapper.selectPage(page, queryWrapper);
+//        QueryWrapper<Weight> weightQueryWrapper = new QueryWrapper<>();
+        //权重
+//        weightQueryWrapper.eq("deleted", 0);
+//        Weight weight = weightMapper.selectOne(weightQueryWrapper);
+//        weight = weight == null ? defaultWeight() : weight;
+//        List<String> weigthSort = new ArrayList<>();
+//        for (Book book : books) {
+//            String key = (book.getBookClickCount() * weight.getClick() + book.getFavoriteCount() * weight.getFavorite() +
+//                    book.getLikeCount() * weight.getWLike()) + "-" + book.getId();
+//            weigthSort.add(key);
+//        }
+//        weigthSort.sort((o1, o2) -> {
+//            int o1Int = Integer.parseInt(o1.substring(0, o1.indexOf("-")));
+//            int o2Int = Integer.parseInt(o2.substring(0, o2.indexOf("-")));
+//            if (o1Int > o2Int) {
+//                return -1;
+//            } else if (o1Int < o2Int) {
+//                return 1;
+//            }
+//            return 0;
+//        });
+//        logger.info("pageNum={},pageSize={}", pageNum, pageSize);
+//        Page<Book> page = new Page<>(pageNum, pageSize);
+//        int pageStart = Math.min((pageNum - 1) * pageSize, books.size());
+//        logger.info("pageStart={},pageNum={}", pageStart, pageSize);
+//        List<String> idStrs = weigthSort.subList(pageStart, pageSize + pageStart);
+//
+//        logger.info("{}", idStrs);
+//        List<Integer> bookIds = new ArrayList<>();
+//        idStrs.forEach(id -> {
+//            String realId = id.substring(id.indexOf("-") + 1);
+//            bookIds.add(Integer.parseInt(realId));
+//        });
+//        List<Book> bookList = bookMapper.selectBatchIds(bookIds);
+//        page.setRecords(bookList);
+//        page.setTotal(books.size());
+//        page.setSize(bookList.size());
+//        page.setPages((int) Math.ceil((double) bookList.size() / pageSize));
+        return page1;
     }
 
     private Weight defaultWeight() {

@@ -1,6 +1,7 @@
 package com.graduation.bookreader.controller;
 
 import com.graduation.bookreader.model.Book;
+import com.graduation.bookreader.model.params.QueryParam;
 import com.graduation.bookreader.model.vo.BookDetailVo;
 import com.graduation.bookreader.model.vo.BookVo;
 import com.graduation.bookreader.service.BookService;
@@ -29,8 +30,8 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/listBooks")
-    public Result getSortBooksByType(Integer type, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
-        return Result.success(bookService.listBookByType(type, pageNum, pageSize));
+    public Result getSortBooksByType(Integer type, String name, Integer pageIndex, Integer pageSize) {
+        return Result.success(bookService.listBookByType(type, name, pageIndex, pageSize));
     }
 
     @GetMapping("/listBooksByName")
@@ -101,7 +102,7 @@ public class BookController {
     }
 
     @GetMapping("/bookTypes")
-    public Result bookTypes(){
+    public Result bookTypes() {
         return Result.success(bookService.getBookTypes());
     }
 

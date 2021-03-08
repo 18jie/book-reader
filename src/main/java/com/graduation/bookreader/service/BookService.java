@@ -28,7 +28,7 @@ public interface BookService {
      * @param pageSize 单页大小
      * @return
      */
-    IPage<Book> listBookByType(Integer type, Integer pageNum, Integer pageSize);
+    IPage<Book> listBookByType(Integer type, String name, Integer pageNum, Integer pageSize);
 
     /**
      * 通过名称查询书籍
@@ -89,7 +89,7 @@ public interface BookService {
 
     Page<BookVo> bookVosByPage(Integer type, Integer pageNum);
 
-    List<Map<String,Object>> getBookTypes();
+    List<Map<String, Object>> getBookTypes();
 
 
 }
