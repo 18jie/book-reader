@@ -1,6 +1,7 @@
 package com.graduation.bookreader.controller;
 
 import com.graduation.bookreader.model.Book;
+import com.graduation.bookreader.model.params.BookUnUpParam;
 import com.graduation.bookreader.model.params.QueryParam;
 import com.graduation.bookreader.model.vo.BookDetailVo;
 import com.graduation.bookreader.model.vo.BookVo;
@@ -29,9 +30,23 @@ public class BookController {
     @Resource
     private BookService bookService;
 
+    /**
+     * 后台接口
+     * @param type
+     * @param name
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/listBooks")
     public Result getSortBooksByType(Integer type, String name, Integer pageIndex, Integer pageSize) {
         return Result.success(bookService.listBookByType(type, name, pageIndex, pageSize));
+    }
+
+    @PostMapping("/unUpBook")
+    public Result unUpBookById(@RequestBody BookUnUpParam bookUnUpParam){
+        bookService.unUpBookByIds(bookUnUpParam.getIds());
+        return Result.success();
     }
 
     @GetMapping("/listBooksByName")

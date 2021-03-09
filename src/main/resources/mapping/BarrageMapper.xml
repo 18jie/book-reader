@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.bookreader.repo.BarrageMapper">
+
+    <select id="barrages" resultType="com.graduation.bookreader.model.dto.BarrageDto">
+        SELECT
+        barrage.id,
+        barrage.create_time,
+        barrage.content,
+        barrage.LEVEL,
+        book.book_name,
+        chapter.chapter_name,
+        users.username
+        FROM
+        b_barrage barrage
+        LEFT JOIN b_book book ON book.id = barrage.book_id
+        LEFT JOIN b_chapter chapter ON barrage.chapter_id = chapter.id
+        LEFT JOIN b_user users ON barrage.user_id = users.id
+        <where>
+            and barrage.deleted = 0
+            <if test="name != null and name != ''">
+                and book.book_name = #{name}
+            </if>
+            <if test="level != null">
+                and barrage.level = #{level}
+            </if>
+        </where>
+    </select>
+
+</mapper>

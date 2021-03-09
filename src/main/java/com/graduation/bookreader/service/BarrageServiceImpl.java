@@ -7,6 +7,7 @@ import com.graduation.bookreader.algorithm.TextClassify;
 import com.graduation.bookreader.model.Barrage;
 import com.graduation.bookreader.model.User;
 import com.graduation.bookreader.model.UserAuthority;
+import com.graduation.bookreader.model.dto.BarrageDto;
 import com.graduation.bookreader.model.vo.BarrageVo;
 import com.graduation.bookreader.repo.BarrageMapper;
 import com.graduation.bookreader.repo.UserAuthorityMapper;
@@ -105,5 +106,11 @@ public class BarrageServiceImpl implements BarrageService {
         barrage.setCreateTime(new Date());
         barrage.setUpdateTime(new Date());
         barrageMapper.insert(barrage);
+    }
+
+    @Override
+    public IPage<BarrageDto> barrages(Integer level, String name, Integer pageIndex, Integer pageSize) {
+        Page<BarrageDto> page = new Page<>(pageIndex, pageSize);
+        return barrageMapper.barrages(page, level, name);
     }
 }

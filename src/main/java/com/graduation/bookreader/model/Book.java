@@ -45,4 +45,9 @@ public class Book extends BaseModel implements Serializable {
 
     private String imgPath;
 
+    /**
+     * 上架状态 0-上 1-下
+     */
+    private Integer upStatus;
+
 }

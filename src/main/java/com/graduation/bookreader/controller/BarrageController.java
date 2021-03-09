@@ -27,11 +27,23 @@ public class BarrageController {
     }
 
     @PostMapping("/saveBarrage")
-    public Result saveBarrage(@RequestBody Barrage barrage){
+    public Result saveBarrage(@RequestBody Barrage barrage) {
         barrageService.addBarrage(barrage);
         return Result.success();
     }
 
+    /**
+     * 后台接口
+     * @param level
+     * @param name
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/barrages")
+    public Result barrages(Integer level, String name, Integer pageIndex, Integer pageSize) {
+        return Result.success(barrageService.barrages(level, name, pageIndex, pageSize));
+    }
 
 
 }

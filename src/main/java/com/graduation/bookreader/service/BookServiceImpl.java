@@ -202,7 +202,7 @@ public class BookServiceImpl implements BookService {
         bookDetailVo.setRetentionRatio(80);
 
         QueryWrapper<Chapter> query = new QueryWrapper<>();
-        query.eq("deleted", 0).eq("book_id", id).orderByDesc("id").last("limit 1");
+        query.eq("deleted", 0).eq("up_status",0).eq("book_id", id).orderByDesc("id").last("limit 1");
         Chapter chapter = chapterMapper.selectOne(query);
         bookDetailVo.setSerializeWordCount(chapter.getContent().toCharArray().length);
         bookDetailVo.setUpdated(book.getBookUpdateTime().getTime());
@@ -213,7 +213,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> searchBookByName(String name) {
         QueryWrapper<Book> bookQueryWrapper = new QueryWrapper<>();
-        bookQueryWrapper.eq("deleted", 0).like("book_name", name);
+        bookQueryWrapper.eq("deleted", 0).eq("up_status", 0).like("book_name", name);
         List<Book> bookList = bookMapper.selectList(bookQueryWrapper);
         return bookList;
     }
@@ -223,9 +223,9 @@ public class BookServiceImpl implements BookService {
         Page<Book> page = new Page<>(pageNum, 8);
         QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
         if (type == 0) {
-            queryWrapper.select("id").eq("deleted", 0).orderByDesc("book_click_count");
+            queryWrapper.select("id").eq("up_status", 0).eq("deleted", 0).orderByDesc("book_click_count");
         } else {
-            queryWrapper.select("id").eq("deleted", 0).eq("book_type", BookTypeEnum.getName(type)).orderByDesc("book_click_count");
+            queryWrapper.select("id").eq("upStatus", 0).eq("deleted", 0).eq("book_type", BookTypeEnum.getName(type)).orderByDesc("book_click_count");
         }
         Page<Book> page1 = bookMapper.selectPage(page, queryWrapper);
 
@@ -259,6 +259,16 @@ public class BookServiceImpl implements BookService {
             mapList.add(map);
         }
         return mapList;
+    }
+
+    @Override
+    public void unUpBookByIds(List<Integer> ids) {
+        ids.forEach(id -> {
+            Book book = new Book();
+            book.setId(id);
+            book.setUpStatus(1);
+            bookMapper.updateById(book);
+        });
     }
 
     private Map<Integer, String> getChaptersByBookIds(List<Integer> bookIds) {

@@ -91,5 +91,6 @@ public interface BookService {
 
     List<Map<String, Object>> getBookTypes();
 
+    void unUpBookByIds(List<Integer> ids);
 
 }

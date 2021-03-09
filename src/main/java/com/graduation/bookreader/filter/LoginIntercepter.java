@@ -32,7 +32,7 @@ public class LoginIntercepter extends HandlerInterceptorAdapter {
             UserThreadLocalContext.init(userId);
         }
         if (requestURL.toString().contains("auth") && userId != null) {
-            response.sendRedirect("/book-reader/login");
+            response.sendRedirect("/login");
         }
         return true;
     }
