@@ -1,6 +1,7 @@
 package com.graduation.bookreader.controller;
 
 import com.graduation.bookreader.model.Barrage;
+import com.graduation.bookreader.model.params.BookUnUpParam;
 import com.graduation.bookreader.service.BarrageService;
 import com.graduation.bookreader.util.Result;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class BarrageController {
 
     /**
      * 后台接口
+     *
      * @param level
      * @param name
      * @param pageIndex
@@ -43,6 +45,18 @@ public class BarrageController {
     @GetMapping("/barrages")
     public Result barrages(Integer level, String name, Integer pageIndex, Integer pageSize) {
         return Result.success(barrageService.barrages(level, name, pageIndex, pageSize));
+    }
+
+    @PostMapping("/deleteBarrages")
+    public Result deleteBarrages(@RequestBody BookUnUpParam bookUnUpParam) {
+        barrageService.deleteBarrages(bookUnUpParam);
+        return Result.success();
+    }
+
+    @PostMapping("/updateBarrage")
+    public Result updateBarrage(@RequestBody Barrage barrage) {
+        barrageService.updateBarrage(barrage);
+        return Result.success();
     }
 
 

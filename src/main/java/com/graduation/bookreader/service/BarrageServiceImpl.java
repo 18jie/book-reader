@@ -8,6 +8,7 @@ import com.graduation.bookreader.model.Barrage;
 import com.graduation.bookreader.model.User;
 import com.graduation.bookreader.model.UserAuthority;
 import com.graduation.bookreader.model.dto.BarrageDto;
+import com.graduation.bookreader.model.params.BookUnUpParam;
 import com.graduation.bookreader.model.vo.BarrageVo;
 import com.graduation.bookreader.repo.BarrageMapper;
 import com.graduation.bookreader.repo.UserAuthorityMapper;
@@ -112,5 +113,21 @@ public class BarrageServiceImpl implements BarrageService {
     public IPage<BarrageDto> barrages(Integer level, String name, Integer pageIndex, Integer pageSize) {
         Page<BarrageDto> page = new Page<>(pageIndex, pageSize);
         return barrageMapper.barrages(page, level, name);
+    }
+
+    @Override
+    public void deleteBarrages(BookUnUpParam bookUnUpParam) {
+        List<Integer> ids = bookUnUpParam.getIds();
+        for (Integer id : ids) {
+            Barrage barrage = new Barrage();
+            barrage.setId(id);
+            barrage.setDeleted(1);
+            barrageMapper.updateById(barrage);
+        }
+    }
+
+    @Override
+    public void updateBarrage(Barrage barrage) {
+        barrageMapper.updateById(barrage);
     }
 }

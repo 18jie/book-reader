@@ -1,12 +1,10 @@
 package com.graduation.bookreader.controller;
 
 import com.graduation.bookreader.model.User;
+import com.graduation.bookreader.model.params.QueryParam;
 import com.graduation.bookreader.service.UserService;
 import com.graduation.bookreader.util.Result;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -31,6 +29,13 @@ public class UserController {
         }
         return Result.fail();
     }
+
+    @GetMapping("/list")
+    public Result listUsers(QueryParam queryParam){
+        return Result.success(userService.listUsers(queryParam));
+    }
+
+
 
 
 }

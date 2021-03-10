@@ -16,4 +16,6 @@ public class BookUnUpParam {
 
     private List<Integer> ids;
 
+    private Integer type;
+
 }

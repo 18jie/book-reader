@@ -1,14 +1,18 @@
 package com.graduation.bookreader.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.model.User;
 import com.graduation.bookreader.model.UserAuthority;
+import com.graduation.bookreader.model.params.QueryParam;
 import com.graduation.bookreader.repo.UserAuthorityMapper;
 import com.graduation.bookreader.repo.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Description:
@@ -49,6 +53,14 @@ public class UserServiceImpl implements UserService {
         //区别年龄段
         //往权限表插入一条数据
         return true;
+    }
+
+    @Override
+    public IPage<User> listUsers(QueryParam queryParam) {
+        Page<User> page = new Page<>(queryParam.getPageIndex(), queryParam.getPageSize());
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("deleted", 0);
+        return userMapper.selectPage(page, queryWrapper);
     }
 
     private void defaultAuth(UserAuthority userAuthority, Integer age) {

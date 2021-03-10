@@ -1,6 +1,10 @@
 package com.graduation.bookreader.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.graduation.bookreader.model.User;
+import com.graduation.bookreader.model.params.QueryParam;
+
+import java.util.List;
 
 /**
  * Description:
@@ -12,5 +16,7 @@ import com.graduation.bookreader.model.User;
 public interface UserService {
 
     boolean register(User user);
+
+    IPage<User> listUsers(QueryParam queryParam);
 
 }

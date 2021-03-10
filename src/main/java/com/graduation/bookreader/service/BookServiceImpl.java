@@ -1,11 +1,11 @@
 package com.graduation.bookreader.service;
 
-import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.enums.BookTypeEnum;
 import com.graduation.bookreader.model.*;
+import com.graduation.bookreader.model.params.BookUnUpParam;
 import com.graduation.bookreader.model.vo.BookDetailVo;
 import com.graduation.bookreader.model.vo.BookVo;
 import com.graduation.bookreader.model.vo.UserFavoriteBookVo;
@@ -202,7 +202,7 @@ public class BookServiceImpl implements BookService {
         bookDetailVo.setRetentionRatio(80);
 
         QueryWrapper<Chapter> query = new QueryWrapper<>();
-        query.eq("deleted", 0).eq("up_status",0).eq("book_id", id).orderByDesc("id").last("limit 1");
+        query.eq("deleted", 0).eq("up_status", 0).eq("book_id", id).orderByDesc("id").last("limit 1");
         Chapter chapter = chapterMapper.selectOne(query);
         bookDetailVo.setSerializeWordCount(chapter.getContent().toCharArray().length);
         bookDetailVo.setUpdated(book.getBookUpdateTime().getTime());
@@ -262,13 +262,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void unUpBookByIds(List<Integer> ids) {
+    public void unUpBookByIds(BookUnUpParam bookUnUpParam) {
+        List<Integer> ids = bookUnUpParam.getIds();
         ids.forEach(id -> {
             Book book = new Book();
             book.setId(id);
-            book.setUpStatus(1);
+            book.setUpStatus(bookUnUpParam.getType());
             bookMapper.updateById(book);
         });
+    }
+
+    @Override
+    public void updateBook(Book book) {
+        bookMapper.updateById(book);
     }
 
     private Map<Integer, String> getChaptersByBookIds(List<Integer> bookIds) {

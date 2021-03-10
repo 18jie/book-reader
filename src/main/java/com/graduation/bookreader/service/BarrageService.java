@@ -3,6 +3,7 @@ package com.graduation.bookreader.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.graduation.bookreader.model.Barrage;
 import com.graduation.bookreader.model.dto.BarrageDto;
+import com.graduation.bookreader.model.params.BookUnUpParam;
 import com.graduation.bookreader.model.vo.BarrageVo;
 
 import java.util.List;
@@ -21,5 +22,9 @@ public interface BarrageService {
     void addBarrage(Barrage barrage);
 
     IPage<BarrageDto> barrages(Integer level, String name,Integer pageIndex,Integer pageSize);
+
+    void deleteBarrages(BookUnUpParam bookUnUpParam);
+
+    void updateBarrage(Barrage barrage);
 
 }

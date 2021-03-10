@@ -32,6 +32,7 @@ public class BookController {
 
     /**
      * 后台接口
+     *
      * @param type
      * @param name
      * @param pageIndex
@@ -44,8 +45,8 @@ public class BookController {
     }
 
     @PostMapping("/unUpBook")
-    public Result unUpBookById(@RequestBody BookUnUpParam bookUnUpParam){
-        bookService.unUpBookByIds(bookUnUpParam.getIds());
+    public Result unUpBookById(@RequestBody BookUnUpParam bookUnUpParam) {
+        bookService.unUpBookByIds(bookUnUpParam);
         return Result.success();
     }
 
@@ -71,7 +72,8 @@ public class BookController {
 
     @PostMapping("updateBook")
     public Result updateBook(@RequestBody Book book) {
-        return null;
+        bookService.updateBook(book);
+        return Result.success();
     }
 
     @GetMapping("/hostTypes")
