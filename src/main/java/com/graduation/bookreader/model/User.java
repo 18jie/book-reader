@@ -35,4 +35,6 @@ public class User extends BaseModel implements Serializable {
 
     private Integer loginCount;
 
+    private Integer auth;
+
 }

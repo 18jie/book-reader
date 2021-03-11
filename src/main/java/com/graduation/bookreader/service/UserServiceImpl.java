@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.model.User;
 import com.graduation.bookreader.model.UserAuthority;
+import com.graduation.bookreader.model.params.BookUnUpParam;
 import com.graduation.bookreader.model.params.QueryParam;
 import com.graduation.bookreader.repo.UserAuthorityMapper;
 import com.graduation.bookreader.repo.UserMapper;
@@ -59,8 +60,28 @@ public class UserServiceImpl implements UserService {
     public IPage<User> listUsers(QueryParam queryParam) {
         Page<User> page = new Page<>(queryParam.getPageIndex(), queryParam.getPageSize());
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("deleted", 0);
+        queryWrapper.like("username",queryParam.getName());
         return userMapper.selectPage(page, queryWrapper);
+    }
+
+    @Override
+    public void updateUser(User user) {
+        User oldUser = userMapper.selectById(user.getId());
+        if(!oldUser.getPassword().equals(user.getPassword())){
+            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        }
+        userMapper.updateById(user);
+    }
+
+    @Override
+    public void deleteUser(BookUnUpParam bookUnUpParam) {
+        List<Integer> ids = bookUnUpParam.getIds();
+        ids.forEach(id -> {
+            User user = new User();
+            user.setId(id);
+            user.setDeleted(bookUnUpParam.getType());
+            userMapper.updateById(user);
+        });
     }
 
     private void defaultAuth(UserAuthority userAuthority, Integer age) {

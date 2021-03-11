@@ -21,6 +21,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class UserFavoriteBookVo extends Book implements Serializable {
 
+    private Integer favoriteId;
+
     private Boolean isFavorite;
 
     List<Chapter> chapters;

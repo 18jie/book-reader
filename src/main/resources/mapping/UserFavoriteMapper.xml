@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.bookreader.repo.UserFavoriteMapper">
+
+    <select id="listFavorite" resultType="com.graduation.bookreader.model.vo.UserFavoriteBookVo">
+        SELECT
+	        favorite.id AS favorite_id ,book.*
+        FROM
+	        b_user_favorite favorite
+	    LEFT JOIN b_book book ON favorite.book_id = book.id
+	    <where>
+            favorite.deleted = 0
+            <if test="name != null and name != ''">
+                and book.book_name LIKE '%${name}%'
+            </if>
+            <if test="userId != null">
+                and favorite.user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

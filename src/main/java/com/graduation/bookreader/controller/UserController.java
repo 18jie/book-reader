@@ -1,6 +1,7 @@
 package com.graduation.bookreader.controller;
 
 import com.graduation.bookreader.model.User;
+import com.graduation.bookreader.model.params.BookUnUpParam;
 import com.graduation.bookreader.model.params.QueryParam;
 import com.graduation.bookreader.service.UserService;
 import com.graduation.bookreader.util.Result;
@@ -31,11 +32,21 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public Result listUsers(QueryParam queryParam){
+    public Result listUsers(QueryParam queryParam) {
         return Result.success(userService.listUsers(queryParam));
     }
 
+    @PostMapping("/updateUser")
+    public Result updateUser(@RequestBody User user) {
+        userService.updateUser(user);
+        return Result.success();
+    }
 
+    @PostMapping("/deleteUser")
+    public Result deleteUser(@RequestBody BookUnUpParam bookUnUpParam) {
+        userService.deleteUser(bookUnUpParam);
+        return Result.success();
+    }
 
 
 }
