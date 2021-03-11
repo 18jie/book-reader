@@ -24,6 +24,9 @@
             <if test="level != null">
                 and barrage.level = #{level}
             </if>
+            <if test="userId != null">
+                and barrage.user_id = #{userId}
+            </if>
         </where>
     </select>
 

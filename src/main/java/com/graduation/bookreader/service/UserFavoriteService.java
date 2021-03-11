@@ -28,4 +28,6 @@ public interface UserFavoriteService {
 
     void deleteFavorites(BookUnUpParam bookUnUpParam);
 
+    boolean isFavorite(Integer bookId);
+
 }

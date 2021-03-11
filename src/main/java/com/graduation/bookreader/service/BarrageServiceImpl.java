@@ -112,7 +112,11 @@ public class BarrageServiceImpl implements BarrageService {
     @Override
     public IPage<BarrageDto> barrages(Integer level, String name, Integer pageIndex, Integer pageSize) {
         Page<BarrageDto> page = new Page<>(pageIndex, pageSize);
-        return barrageMapper.barrages(page, level, name);
+        User user = userSession.localUser();
+        if (user == null || user.getAuth() == 1) {
+            return barrageMapper.barrages(page, level, name, null);
+        }
+        return barrageMapper.barrages(page, level, name, user.getId());
     }
 
     @Override

@@ -42,4 +42,5 @@ public class LoginController {
     public Result isLogin(){
         return Result.success(loginService.isLogin());
     }
+
 }

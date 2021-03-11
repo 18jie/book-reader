@@ -19,6 +19,6 @@ import java.util.List;
  */
 public interface BarrageMapper extends BaseMapper<Barrage> {
 
-    IPage<BarrageDto> barrages(Page<BarrageDto> page, @Param("level") Integer level, @Param("name") String name);
+    IPage<BarrageDto> barrages(Page<BarrageDto> page, @Param("level") Integer level, @Param("name") String name,@Param("userId") Integer userId);
 
 }

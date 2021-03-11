@@ -88,6 +88,10 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     public IPage<UserFavoriteBookVo> userFavorite(QueryParam queryParam) {
         User user = userSession.localUser();
         Page<UserFavoriteBookVo> page = new Page<>(queryParam.getPageIndex(), queryParam.getPageSize());
+        if (user == null) {
+            // TODO 没有用户时应该不返回数据
+            return userFavoriteMapper.listFavorite(page, null, queryParam.getName());
+        }
         return userFavoriteMapper.listFavorite(page, user.getId(), queryParam.getName());
     }
 
@@ -117,5 +121,16 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
             userFavorite.setDeleted(1);
             userFavoriteMapper.updateById(userFavorite);
         });
+    }
+
+    @Override
+    public boolean isFavorite(Integer bookId) {
+        QueryWrapper<UserFavorite> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("book_id", bookId).eq("deleted", 0);
+        List<UserFavorite> userFavorites = userFavoriteMapper.selectList(queryWrapper);
+        if (userFavorites.size() == 0) {
+            return false;
+        }
+        return true;
     }
 }

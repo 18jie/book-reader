@@ -38,15 +38,22 @@ public class UserFavoriteController {
     }
 
     @PostMapping("/deleteFavorites")
-    public Result deleteFavorites(@RequestBody BookUnUpParam bookUnUpParam){
+    public Result deleteFavorites(@RequestBody BookUnUpParam bookUnUpParam) {
         userFavoriteService.deleteFavorites(bookUnUpParam);
         return Result.success();
     }
 
-    @GetMapping("/listFavoriteBookVo")
-    public Result listFavoriteBookVo(Integer pageNum){
+    @GetMapping("/listFavoriteBookVo/{pageNum}")
+    public Result listFavoriteBookVo(@PathVariable("pageNum") Integer pageNum) {
         return Result.success(userFavoriteService.listFavoriteBookVo(pageNum));
     }
+
+    @GetMapping("/isFavorite")
+    public Result isFavorite(Integer bookId) {
+        return Result.success(userFavoriteService.isFavorite(bookId));
+    }
+
+
 
 
 }

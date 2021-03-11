@@ -163,15 +163,15 @@ public class BookServiceImpl implements BookService {
         List<Book> bookList;
         if (type == 1) {
             QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("deleted", 0).orderByDesc("book_click_count").last("limit 4");
+            queryWrapper.eq("deleted", 0).eq("up_status",0).orderByDesc("book_click_count").last("limit 4");
             bookList = bookMapper.selectList(queryWrapper);
         } else if (type == 2) {
             QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("deleted", 0).orderByDesc("book_update_time").last("limit 4");
+            queryWrapper.eq("deleted", 0).eq("up_status",0).orderByDesc("book_update_time").last("limit 4");
             bookList = bookMapper.selectList(queryWrapper);
         } else {
             QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("deleted", 0).orderByDesc("book_click_count");
+            queryWrapper.eq("deleted", 0).eq("up_status",0).orderByDesc("book_click_count");
             bookList = bookMapper.selectList(queryWrapper);
         }
         List<Integer> ids = bookList.stream().map(Book::getId).collect(Collectors.toList());
@@ -202,7 +202,7 @@ public class BookServiceImpl implements BookService {
         bookDetailVo.setRetentionRatio(80);
 
         QueryWrapper<Chapter> query = new QueryWrapper<>();
-        query.eq("deleted", 0).eq("up_status", 0).eq("book_id", id).orderByDesc("id").last("limit 1");
+        query.eq("deleted", 0).eq("book_id", id).orderByDesc("id").last("limit 1");
         Chapter chapter = chapterMapper.selectOne(query);
         bookDetailVo.setSerializeWordCount(chapter.getContent().toCharArray().length);
         bookDetailVo.setUpdated(book.getBookUpdateTime().getTime());
