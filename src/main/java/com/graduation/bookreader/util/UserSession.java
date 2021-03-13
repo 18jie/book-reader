@@ -32,4 +32,8 @@ public class UserSession {
         return userMapper.selectById(userId);
     }
 
+    public void removeUser(){
+        UserThreadLocalContext.clear();
+    }
+
 }

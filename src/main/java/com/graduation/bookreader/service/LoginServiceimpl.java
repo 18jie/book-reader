@@ -51,6 +51,7 @@ public class LoginServiceimpl implements LoginService {
     @Override
     public boolean logout(User usr, HttpServletRequest request) {
         User user = userSession.localUser();
+        userSession.removeUser();
         if (user.getId().equals(usr.getId())) {
             request.getSession().removeAttribute("userId");
             return true;
@@ -60,7 +61,6 @@ public class LoginServiceimpl implements LoginService {
 
     @Override
     public User isLogin() {
-
         return userSession.localUser();
     }
 }

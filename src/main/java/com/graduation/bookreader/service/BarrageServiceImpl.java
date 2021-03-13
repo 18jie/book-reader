@@ -10,6 +10,8 @@ import com.graduation.bookreader.model.UserAuthority;
 import com.graduation.bookreader.model.dto.BarrageDto;
 import com.graduation.bookreader.model.params.BookUnUpParam;
 import com.graduation.bookreader.model.vo.BarrageVo;
+import com.graduation.bookreader.model.vo.CommentUser;
+import com.graduation.bookreader.model.vo.CommentVo;
 import com.graduation.bookreader.repo.BarrageMapper;
 import com.graduation.bookreader.repo.UserAuthorityMapper;
 import com.graduation.bookreader.repo.UserMapper;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +54,7 @@ public class BarrageServiceImpl implements BarrageService {
     private UserSession userSession;
 
     @Override
-    public IPage<BarrageVo> listBarrage(Integer chapterId, String comment, Integer pageNum, Integer pageSize) {
+    public IPage<CommentVo> listBarrage(Integer chapterId, String comment, Integer pageNum, Integer pageSize) {
         Page<Barrage> page = new Page<>(pageNum, pageSize);
         Barrage barrage = new Barrage();
         barrage.setChapterId(chapterId);
@@ -77,21 +80,40 @@ public class BarrageServiceImpl implements BarrageService {
         QueryWrapper<Barrage> queryWrapper = new QueryWrapper<>();
         queryWrapper.le("level", barrage.getLevel()).eq("deleted", 0).eq("content_code", barrage.getContentCode());
         Page<Barrage> barragePage = barrageMapper.selectPage(page, queryWrapper);
-        List<Barrage> records = barragePage.getRecords();
-        List<BarrageVo> barrageVos = new ArrayList<>();
-        records.forEach(record -> {
-            BarrageVo barrageVo = new BarrageVo();
-            BeanUtils.copyProperties(record, barrageVo);
-            User user1 = userMapper.selectById(record.getUserId());
-            barrageVo.setUserName(user1.getUsername());
-            barrageVos.add(barrageVo);
-        });
-        Page<BarrageVo> page1 = new Page<>(pageNum, pageSize);
-        page1.setRecords(barrageVos);
-        page1.setTotal(barragePage.getTotal());
-        page1.setCurrent(barragePage.getCurrent());
 
-        return page1;
+        Page<CommentVo> commentVoPage = new Page<>();
+        List<CommentVo> commentVos = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        barragePage.getRecords().forEach(record -> {
+            CommentVo commentVo = new CommentVo();
+            commentVo.setId(record.getId());
+            commentVo.setContent(record.getContent());
+            commentVo.setCreateDate(simpleDateFormat.format(record.getCreateTime()));
+            CommentUser commentUser = new CommentUser();
+            User user1 = userMapper.selectById(record.getUserId());
+            commentUser.setId(user1.getId());
+            commentUser.setNickName(user1.getUsername());
+            commentUser.setAvatar("");
+            commentVo.setCommentUser(commentUser);
+            commentVos.add(commentVo);
+        });
+        BeanUtils.copyProperties(barragePage,commentVoPage);
+        commentVoPage.setRecords(commentVos);
+//        List<Barrage> records = barragePage.getRecords();
+//        List<BarrageVo> barrageVos = new ArrayList<>();
+//        records.forEach(record -> {
+//            BarrageVo barrageVo = new BarrageVo();
+//            BeanUtils.copyProperties(record, barrageVo);
+//            User user1 = userMapper.selectById(record.getUserId());
+//            barrageVo.setUserName(user1.getUsername());
+//            barrageVos.add(barrageVo);
+//        });
+//        Page<BarrageVo> page1 = new Page<>(pageNum, pageSize);
+//        page1.setRecords(barrageVos);
+//        page1.setTotal(barragePage.getTotal());
+//        page1.setCurrent(barragePage.getCurrent());
+
+        return commentVoPage;
     }
 
     @Override

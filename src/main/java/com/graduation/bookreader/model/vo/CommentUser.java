@@ -9,19 +9,17 @@ import java.util.List;
  * Description:
  * <p>
  * Author: 丰杰
- * Date: 2021-03-06
- * Time: 15:50
+ * Date: 2021-03-13
+ * Time: 21:52
  */
 @Data
 @ToString
-public class ContentVo {
+public class CommentUser {
 
-    private List<LineVo> content;
+    private Integer id;
 
-    private String chapterTitle;
+    private String nickName;
 
-    private Integer order;
-
-    private Boolean isVip;
+    private String avatar;
 
 }

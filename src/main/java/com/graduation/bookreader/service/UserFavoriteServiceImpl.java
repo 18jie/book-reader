@@ -125,8 +125,12 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
 
     @Override
     public boolean isFavorite(Integer bookId) {
+        User user = userSession.localUser();
+        if (user == null) {
+            return false;
+        }
         QueryWrapper<UserFavorite> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("book_id", bookId).eq("deleted", 0);
+        queryWrapper.eq("book_id", bookId).eq("user_id", user.getId()).eq("deleted", 0);
         List<UserFavorite> userFavorites = userFavoriteMapper.selectList(queryWrapper);
         if (userFavorites.size() == 0) {
             return false;

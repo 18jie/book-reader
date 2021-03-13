@@ -23,8 +23,8 @@ public class BarrageController {
     private BarrageService barrageService;
 
     @GetMapping("/listBarrage")
-    public Result listBarrage(Integer chapterId, String comment, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
-        return Result.success(barrageService.listBarrage(chapterId, comment, pageNum, pageSize));
+    public Result listBarrage(Integer chapterId, String content, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+        return Result.success(barrageService.listBarrage(chapterId, content, pageNum, pageSize));
     }
 
     @PostMapping("/saveBarrage")

@@ -223,9 +223,9 @@ public class BookServiceImpl implements BookService {
         Page<Book> page = new Page<>(pageNum, 8);
         QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
         if (type == 0) {
-            queryWrapper.select("id").eq("up_status", 0).eq("deleted", 0).orderByDesc("book_click_count");
+            queryWrapper.select("id").eq("deleted", 0).orderByDesc("book_click_count");
         } else {
-            queryWrapper.select("id").eq("upStatus", 0).eq("deleted", 0).eq("book_type", BookTypeEnum.getName(type)).orderByDesc("book_click_count");
+            queryWrapper.select("id").eq("deleted", 0).eq("book_type", BookTypeEnum.getName(type)).orderByDesc("book_click_count");
         }
         Page<Book> page1 = bookMapper.selectPage(page, queryWrapper);
 

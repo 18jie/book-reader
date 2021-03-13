@@ -111,7 +111,7 @@ public class ChapterServiceImpl implements ChapterService {
 
         ContentVo contentVo = new ContentVo();
         contentVo.setChapterTitle(chapter.getChapterName());
-        contentVo.setContent(chapter.getContent());
+        contentVo.setContent(this.chapterDetail(chapterId).getLines());
         contentVo.setOrder(chapterId - firstOne.getId() + 1);
         contentVo.setIsVip(false);
         return contentVo;

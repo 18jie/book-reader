@@ -5,6 +5,7 @@ import com.graduation.bookreader.model.Barrage;
 import com.graduation.bookreader.model.dto.BarrageDto;
 import com.graduation.bookreader.model.params.BookUnUpParam;
 import com.graduation.bookreader.model.vo.BarrageVo;
+import com.graduation.bookreader.model.vo.CommentVo;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public interface BarrageService {
 
-    IPage<BarrageVo> listBarrage(Integer chapterId, String comment, Integer pageNum, Integer pageSize);
+    IPage<CommentVo> listBarrage(Integer chapterId, String comment, Integer pageNum, Integer pageSize);
 
     void addBarrage(Barrage barrage);
 

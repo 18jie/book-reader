@@ -13,7 +13,7 @@ class BookReaderApplicationTests {
 
     @Test
     void contextLoads() {
-        String s = DigestUtils.md5DigestAsHex("123456".trim().getBytes());
+        String s = DigestUtils.md5DigestAsHex("武魂分为品级，又低到高：黄，玄，地，天，帝，神。".trim().getBytes());
         System.out.println(s);
     }
 
