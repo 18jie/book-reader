@@ -2,6 +2,7 @@ package com.graduation.bookreader.repo;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.graduation.bookreader.model.Book;
+import com.graduation.bookreader.model.dto.BookTop;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -19,7 +20,5 @@ import java.util.Map;
  */
 public interface BookMapper extends BaseMapper<Book> {
 
-    @Select("select type,count(1) from b_book where deleted = 0")
-    List<Map<Integer,Integer>> bookCountByType();
-
+    List<BookTop> bookTop();
 }

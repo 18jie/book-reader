@@ -3,6 +3,7 @@ package com.graduation.bookreader.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.model.Book;
+import com.graduation.bookreader.model.dto.BookTop;
 import com.graduation.bookreader.model.params.BookUnUpParam;
 import com.graduation.bookreader.model.vo.BookDetailVo;
 import com.graduation.bookreader.model.vo.BookVo;
@@ -95,5 +96,7 @@ public interface BookService {
     void unUpBookByIds(BookUnUpParam bookUnUpParam);
 
     void updateBook(Book book);
+
+    List<BookTop> topFour();
 
 }

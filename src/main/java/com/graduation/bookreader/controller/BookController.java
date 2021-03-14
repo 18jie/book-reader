@@ -123,5 +123,10 @@ public class BookController {
         return Result.success(bookService.getBookTypes());
     }
 
+    @GetMapping("/bookTop")
+    public Result topFour(){
+        return Result.success(bookService.topFour());
+    }
+
 
 }

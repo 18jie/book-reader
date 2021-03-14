@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graduation.bookreader.repo.BookMapper">
+
+    <select id="bookTop" resultType="com.graduation.bookreader.model.dto.BookTop">
+        select book_type,count(1) as counts from b_book
+        <where>
+            and deleted = 0
+        </where>
+        group by book_type
+    </select>
+</mapper>

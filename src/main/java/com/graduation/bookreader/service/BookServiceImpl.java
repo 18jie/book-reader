@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.graduation.bookreader.enums.BookTypeEnum;
 import com.graduation.bookreader.model.*;
+import com.graduation.bookreader.model.dto.BookTop;
 import com.graduation.bookreader.model.params.BookUnUpParam;
 import com.graduation.bookreader.model.vo.BookDetailVo;
 import com.graduation.bookreader.model.vo.BookVo;
@@ -155,7 +156,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void countByType() {
         // TODO
-        List<Map<Integer, Integer>> maps = bookMapper.bookCountByType();
+//        List<Map<Integer, Integer>> maps = bookMapper.bookCountByType();
     }
 
     @Override
@@ -163,15 +164,15 @@ public class BookServiceImpl implements BookService {
         List<Book> bookList;
         if (type == 1) {
             QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("deleted", 0).eq("up_status",0).orderByDesc("book_click_count").last("limit 4");
+            queryWrapper.eq("deleted", 0).eq("up_status", 0).orderByDesc("book_click_count").last("limit 4");
             bookList = bookMapper.selectList(queryWrapper);
         } else if (type == 2) {
             QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("deleted", 0).eq("up_status",0).orderByDesc("book_update_time").last("limit 4");
+            queryWrapper.eq("deleted", 0).eq("up_status", 0).orderByDesc("book_update_time").last("limit 4");
             bookList = bookMapper.selectList(queryWrapper);
         } else {
             QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("deleted", 0).eq("up_status",0).orderByDesc("book_click_count");
+            queryWrapper.eq("deleted", 0).eq("up_status", 0).orderByDesc("book_click_count");
             bookList = bookMapper.selectList(queryWrapper);
         }
         List<Integer> ids = bookList.stream().map(Book::getId).collect(Collectors.toList());
@@ -275,6 +276,24 @@ public class BookServiceImpl implements BookService {
     @Override
     public void updateBook(Book book) {
         bookMapper.updateById(book);
+    }
+
+    @Override
+    public List<BookTop> topFour() {
+        List<BookTop> bookTops = bookMapper.bookTop();
+        bookTops.sort((o1, o2) -> {
+            if (o1.getCounts() > o2.getCounts()) {
+                return -1;
+            } else if (o1.getCounts() < o2.getCounts()) {
+                return 1;
+            }
+            return 0;
+        });
+        List<BookTop> bookTops1 = bookTops.subList(0, 4);
+        bookTops1.forEach(item -> {
+            item.setCounts((item.getCounts() / 136) * 100);
+        });
+        return bookTops1;
     }
 
     private Map<Integer, String> getChaptersByBookIds(List<Integer> bookIds) {
